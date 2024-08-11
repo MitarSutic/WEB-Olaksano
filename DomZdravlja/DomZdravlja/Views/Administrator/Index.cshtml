@@ -4,5 +4,34 @@
 }
 
 <h2>Dobrodošli, administratoru!</h2>
-
-
+<body>
+    <form action="/Administrator/ViewPacijent" method="get">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Korisnicko ime</th>
+                    <th>Prikazi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var k in ViewBag.pacijenti)
+                {
+                    <tr>
+                        <td>@k.KorisnickoIme</td>
+                        <td>
+                            <a href="@Url.Action("ViewPacijent", "Administrator", new { korisnickoIme = k.KorisnickoIme })">Prikazi</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>            
+        </table>
+    </form>
+    <form action="/Administrator/Registration" method="get">
+        
+        <input type="submit" value="REg" />
+    </form>
+    <h2>Dodaj novog korisnika</h2>
+    <form action="/Administrator/Registration">
+        <input type="submit" value="Dodaj novog" />
+    </form>
+</body>

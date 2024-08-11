@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Registration";
+}
+
+<h2>Registration</h2>
+<body>
+    <form action="/Administrator/Register" method="post">
+        @if(ViewBag.greska != null)
+            {
+                <h2> @ViewBag.greska</h2>
+            }
+        <label>Korisnicko ime:</label>
+        <input type="text" name="kime">
+        <br />
+        <label>Ime</label>
+        <input type="text" name="ime" />
+        <br />
+        <label>Prezime</label>
+        <input type="text" name="prezime" />
+        <br />
+        <label>Sifra</label>
+        <input type="password" name="sifra" />
+        <br />
+        <label>Datum rodjena</label>
+        <input type="text" name="datum" />
+        <br />
+        <label>Email</label>
+        <input type="email" name="email" />
+        <br />
+        <label>JMBG</label>
+        <input type="text" name="jmbg" />
+        <br />
+        <input type="submit" value="Save" />
+    </form>
+</body>
+

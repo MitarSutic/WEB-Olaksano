@@ -3,4 +3,42 @@
 }
 
 <h2>Dobrodošli, pacijentu!</h2>
+<body>
+    <h2>Prikaz Termina</h2>
 
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Lekar:</th>
+                <th>Status</th>
+                <th>Datum i Vreme</th>
+                <th>Opis Terapije</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var termin in ViewBag.stermini)
+            {
+                <tr>
+                    <td>@termin.kImeLekara</td>
+                    <td>@termin.Statustermina</td>
+                    <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@termin.OpisTerapije</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h2>Zakazivanje termina</h2>
+    <form action="~/Pacijent/ZakaziTermin" method="post">
+        <table>
+            <tr>
+                <td>Datum i Vreme:</td>
+                <td><input type="datetime-local" name="DatumIVreme" /></td>
+            </tr>
+            <tr>
+                <td>Lekar:</td>
+                <td><input type="text" name="ImeLekara" /></td>
+            </tr>
+        </table>
+        <input type="submit" value="Zakazi termin"/>
+    </form>
+</body>

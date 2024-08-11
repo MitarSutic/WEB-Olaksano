@@ -92,6 +92,8 @@
     <Content Include="App_Data\lekari.txt" />
     <Content Include="App_Data\pacijenti.txt" />
     <Content Include="App_Data\administrator.txt" />
+    <Content Include="App_Data\slobodni termini.txt" />
+    <Content Include="App_Data\zakazani i slobodni termini.txt" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -124,6 +126,8 @@
     <Content Include="Views\Pacijent\Index.cshtml" />
     <Content Include="Views\Lekar\Index.cshtml" />
     <Content Include="Views\Administrator\Index.cshtml" />
+    <Content Include="Views\Administrator\Registration.cshtml" />
+    <Content Include="Views\Administrator\ViewPacijent.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

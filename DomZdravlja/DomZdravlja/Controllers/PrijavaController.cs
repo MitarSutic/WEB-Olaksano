@@ -15,6 +15,7 @@ namespace DomZdravlja.Controllers
         public ActionResult Index()
         {
             ViewBag.korisnici = HttpContext.Application["korisnici"];
+            ViewBag.pacijenti = HttpContext.Application["pacijenti"];
             return View();
         }
 
@@ -22,6 +23,7 @@ namespace DomZdravlja.Controllers
         public ActionResult Login(string kIme, string sifra)
         {
             Dictionary<string, Korisnik> korisnici = (Dictionary<string,Korisnik>)HttpContext.Application["korisnici"];
+            ViewBag.pacijenti = (List<Pacijent>)HttpContext.Application["pacijenti"];
             if (korisnici.ContainsKey(kIme))
             {
                 var korisnik = korisnici[kIme];
@@ -30,14 +32,17 @@ namespace DomZdravlja.Controllers
                     
                     if (korisnik.Tip == Type.Pacijent)
                     {
+                        Session["user"] = korisnik;
                         return RedirectToAction("Index", "Pacijent");
                     }
                     else if (korisnik.Tip == Type.Lekar)
-                    { 
+                    {
+                        Session["user"] = korisnik;
                         return RedirectToAction("Index", "Lekar");
                     }
                     else if (korisnik.Tip == Type.Administrator)
                     {
+                        Session["user"] = korisnik;
                         return RedirectToAction("Index", "Administrator");
                     }
                 }
@@ -49,8 +54,9 @@ namespace DomZdravlja.Controllers
 
         public ActionResult Logout()
         {
+            Session["user"] = null;
             FormsAuthentication.SignOut();
-            return RedirectToAction("Login");
+            return View("Index");
         }
     }
 }

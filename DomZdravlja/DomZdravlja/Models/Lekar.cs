@@ -7,6 +7,11 @@ namespace DomZdravlja.Models
 {
     public class Lekar : Korisnik
     {
-        public List<Termin>ListaZakazanihISlobodnihTermina { get; set; }
+
+        public List<Termin>ListaZakazanihISlobodnihTermina { get; set; } = new List<Termin>();
+        public override string ToString()
+        {
+             return $"{base.ToString()},Termini: {string.Join(",", ListaZakazanihISlobodnihTermina)}";
+        }
     }
 }

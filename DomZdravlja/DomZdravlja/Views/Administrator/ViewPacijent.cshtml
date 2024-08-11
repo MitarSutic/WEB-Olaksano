@@ -1,0 +1,28 @@
+﻿
+<body>
+    <h2>Prikaz pacijenta</h2>
+    <form action="/Administrator/Index" method="get">
+        <label>Korisnicko ime</label>
+        <label>@ViewBag.pacijent.KorisnickoIme</label>
+        <br />
+        <label>Ime</label>
+        <label>@ViewBag.pacijent.Ime</label>
+        <br />
+        <label>Prezime</label>
+        <label>@ViewBag.pacijent.Prezime</label>
+        <br />
+        <label>Sifra</label>
+        <label>@ViewBag.pacijent.Sifra</label>
+        <br />
+        <label>Datum rodjena</label>
+        <label>@ViewBag.pacijent.DatumRodjenja.ToString()</label>
+        <br />
+        <label>Email</label>
+        <label>@ViewBag.pacijent.Email</label>
+        <br />
+        <label>JMBG</label>
+        <label>@ViewBag.pacijent.JMBG</label>
+        <br />
+        <input type="submit" value="Nazad" />
+    </form>
+</body>

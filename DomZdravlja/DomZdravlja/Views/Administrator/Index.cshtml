@@ -4,13 +4,19 @@
 }
 
 <h2>Dobrodošli, administratoru!</h2>
-<body>
-    <form action="/Administrator/ViewPacijent" method="get">
+@if (ViewBag.poruka != null)
+{
+    <h2>@ViewBag.poruka</h2>
+}
+else
+{
+    <body>
         <table border="1">
             <thead>
                 <tr>
                     <th>Korisnicko ime</th>
                     <th>Prikazi</th>
+                    <th>Izmeni</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,17 +27,23 @@
                         <td>
                             <a href="@Url.Action("ViewPacijent", "Administrator", new { korisnickoIme = k.KorisnickoIme })">Prikazi</a>
                         </td>
+                        <td>
+                            <a href="@Url.Action("EditPacijent", "Administrator", new { korisnickoIme = k.KorisnickoIme })">Izmeni</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("ObrisiPacijent", "Administrator", new { korisnickoIme = k.KorisnickoIme })">Obrisi</a>
+                        </td>
                     </tr>
                 }
-            </tbody>            
+            </tbody>
         </table>
-    </form>
-    <form action="/Administrator/Registration" method="get">
-        
-        <input type="submit" value="REg" />
-    </form>
-    <h2>Dodaj novog korisnika</h2>
-    <form action="/Administrator/Registration">
-        <input type="submit" value="Dodaj novog" />
-    </form>
-</body>
+        <h2>Dodaj novog korisnika</h2>
+        <form action="/Administrator/Registration">
+            <input type="submit" value="Dodaj novog" />
+        </form>
+        <form action="/Administrator/Logout">
+            <input type="submit" value="Logout" />
+        </form>
+    </body>
+
+}

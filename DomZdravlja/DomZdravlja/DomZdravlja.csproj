@@ -128,6 +128,7 @@
     <Content Include="Views\Administrator\Index.cshtml" />
     <Content Include="Views\Administrator\Registration.cshtml" />
     <Content Include="Views\Administrator\ViewPacijent.cshtml" />
+    <Content Include="Views\Administrator\EditPacijent.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -20,30 +20,6 @@
         </tr>
     </table>
 </form>
-@if (ViewBag.pacijenti != null)
-{
-    <h3>Pacijenti</h3>
-    <table border="1">
-        <tr>
-            <th>Korisnicko Ime</th>
-            <th>Ime</th>
-            <th>Prezime</th>
-            <th>Email</th>
-            <th>Datum Rodjenja</th>
-            <th>JMBG:</th>
-        </tr>
-        @foreach (var pacijent in ViewBag.pacijenti)
-        {
-            <tr>
-                <td>@pacijent.KorisnickoIme</td>
-                <td>@pacijent.Ime</td>
-                <td>@pacijent.Prezime</td>
-                <td>@pacijent.Email</td>
-                <td>@pacijent.DatumRodjenja.ToString("dd/MM/yyyy")</td>
-                <td>@pacijent.JMBG</td>
-            </tr>
-        }
-    </table>
- }
+
 
 

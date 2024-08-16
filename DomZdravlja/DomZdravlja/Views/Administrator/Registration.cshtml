@@ -5,11 +5,7 @@
 
 <h2>Registration</h2>
 <body>
-    <form action="/Administrator/Register" method="post">
-        @if(ViewBag.greska != null)
-            {
-                <h2> @ViewBag.greska</h2>
-            }
+    <form id="regForm" action="/Administrator/Register" method="post" onsubmit=" return validateForm()">
         <label>Korisnicko ime:</label>
         <input type="text" name="kime">
         <br />
@@ -33,5 +29,49 @@
         <br />
         <input type="submit" value="Save" />
     </form>
+    <form action="/Administrator/Index" method="get">
+        <input type="submit" value="Nazad" />
+    </form>
 </body>
+<script>
+    function validateForm() {
+        var kime = document.forms["regForm"]["kime"].value;
+        var ime = document.forms["regForm"]["ime"].value;
+        var prezime = document.forms["regForm"]["prezime"].value;
+        var sifra = document.forms["regForm"]["sifra"].value;
+        var datum = document.forms["regForm"]["datum"].value;
+        var email = document.forms["regForm"]["email"].value;
+        var jmbg = document.forms["regForm"]["jmbg"].value;
+
+        if (kime === "" || ime === "" || prezime === "" || sifra === "" || datum === "" || email === "" || jmbg === "") {
+            alert("Sva polja su obavezna!");
+            return false;
+        }
+        var datePattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+        if (!datum.match(datePattern)) {
+            alert("Datum mora biti u formatu dd/MM/yyyy!");
+            return false;
+        }
+        var parts = datum.split('/');
+        var day = parseInt(parts[0], 10);
+        var month = parseInt(parts[1], 10);
+        var year = parseInt(parts[2], 10);
+        var date = new Date(year, month - 1, day);
+
+        // Check if date is valid
+        if (date.getDate() !== day || date.getMonth() + 1 !== month || date.getFullYear() !== year) {
+            alert("Unet datum nije validan!");
+            return false;
+        }
+
+        var jmbgPattern = /^\d{13}$/;
+        if (!jmbg.match(jmbgPattern)) {
+            alert("JMBG mora biti tačno 13 cifara!");
+            return false;
+        }
+
+
+        return true;
+    }
+</script>
 

@@ -22,7 +22,7 @@ namespace DomZdravlja.Models
 
         public override string ToString()
         {
-            return $"{kImeLekara}; {Statustermina}; {DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy")}; {OpisTerapije}";
+            return $"{kImeLekara}; {ImePacijenta}; {Statustermina}; {DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")}; {OpisTerapije}";
         }
     }
 }

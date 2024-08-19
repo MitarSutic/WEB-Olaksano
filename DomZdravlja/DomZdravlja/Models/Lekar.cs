@@ -11,7 +11,7 @@ namespace DomZdravlja.Models
         public List<Termin>ListaZakazanihISlobodnihTermina { get; set; } = new List<Termin>();
         public override string ToString()
         {
-             return $"{base.ToString()},Termini: {string.Join(",", ListaZakazanihISlobodnihTermina)}";
+             return $"{base.ToString()}/*,Termini: {string.Join(",", ListaZakazanihISlobodnihTermina)}*/";
         }
     }
 }

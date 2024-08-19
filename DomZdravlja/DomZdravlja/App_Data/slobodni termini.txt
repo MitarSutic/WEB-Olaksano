@@ -1,3 +1,3 @@
-﻿lekar;pacijent;Slobodan;04/08/2024;Ovo je opis prvog termina
-lekar;pacijent;Slobodan;03/07/2024;Ovo je opis drugog termina
-lekar;pacijent2;Slobodan;13/07/2024;Ovo je opis treceg termina
+﻿lekar;04/08/2024 10:00
+lekar;03/07/2024 11:00
+lekar;13/07/2024 12:00

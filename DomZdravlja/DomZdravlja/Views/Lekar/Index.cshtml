@@ -26,4 +26,27 @@
             }
         </tbody>
     </table>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Datum i Vreme</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var termin in ViewBag.sltermini)
+            {
+                if (ViewBag.korisnik.KorisnickoIme == termin.kImeLekara)
+                {
+                    <tr>
+                        <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@termin.Statustermina</td>
+                    </tr>
+                }
+             }
+        </tbody>
+    </table>
+    <form action="/Lekar/MakeTermin">
+        <input type="submit" value="Kreiraj termin" />
+    </form>
 </body>

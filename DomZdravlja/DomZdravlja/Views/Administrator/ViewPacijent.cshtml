@@ -23,6 +23,37 @@
         <label>JMBG</label>
         <label>@ViewBag.pacijent.JMBG</label>
         <br />
-        <input type="submit" value="Nazad" />
+        <h3>Termini</h3>
+        @if (ViewBag.terminiPacijenta != null && ViewBag.terminiPacijenta.Count > 0)
+        {
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Lekar</th>
+                        <th>Datum termina</th>
+                        <th>Opis</th>
+                        <!-- Add more columns for other Termin fields if needed -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var termin in ViewBag.terminiPacijenta)
+                    {
+                        <tr>
+                            <td>@termin.kImeLekara</td>
+                            <td>@termin.DatumIVremeZakazanogTermina.ToString()</td>
+                            <td>@termin.OpisTerapije</td>
+                            <!-- Add more cells for other Termin fields if needed -->
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Pacijent nema zakazanih termina.</p>
+        }
+
+        <br />
+    <input type="submit" value="Nazad" />
     </form>
 </body>

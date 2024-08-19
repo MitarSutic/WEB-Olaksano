@@ -20,7 +20,9 @@ namespace DomZdravlja.Controllers
             Korisnik korisnik = (Korisnik)Session["user"];
             ViewBag.korisnik = korisnik;
             List<Pacijent> sviPacijenti = (List<Pacijent>)HttpContext.Application["pacijenti"];
+            List<Termin> sizTermini = (List<Termin>) HttpContext.Application["sIztermini"];
             ViewBag.pacijenti = sviPacijenti;
+            ViewBag.sviTermini = sizTermini;
             return View();
         }
 
@@ -48,20 +50,48 @@ namespace DomZdravlja.Controllers
         public ActionResult ViewPacijent(string korisnickoIme)
         {
             List<Pacijent> sviPacijenti = (List<Pacijent>)HttpContext.Application["pacijenti"];
+            List<Termin> sviTermini = (List<Termin>)HttpContext.Application["sIztermini"];
+            List<Termin> terminiPacijenta = new List<Termin>();
             foreach(var p in sviPacijenti)
             {
                 if(p.KorisnickoIme == korisnickoIme)
                 {
-                    ViewBag.pacijent = p; 
+                    ViewBag.pacijent = p;
+                    foreach(var t in sviTermini)
+                    {
+                        if(t.ImePacijenta == p.Ime)
+                        {
+                            terminiPacijenta.Add(t);
+                        }
+                    }
                 }
             }
+            ViewBag.terminiPacijenta = terminiPacijenta;
             return View();
         }
 
         [HttpPost]
-        public ActionResult Register(string ime, string prezime, string sifra, string kime, string datum,string email,string jmbg)
+        public ActionResult Register(string ime, string prezime, string sifra, string kime, DateTime datum,string email,string jmbg, string tip)
         {
             List<Pacijent> sviPacijenti = (List<Pacijent>)HttpContext.Application["pacijenti"];
+            foreach(Pacijent p in sviPacijenti)
+            {
+                if (kime == p.KorisnickoIme)
+                {
+                    ViewBag.kime = "Korisnicko ime mora biti jedinstveno!";
+                    return View("Registration");
+                }
+                else if (email == p.Email)
+                {
+                    ViewBag.email = "Email mora biti jedinstven!";
+                    return View("Registration");
+                }
+                else if (jmbg == p.JMBG)
+                {
+                    ViewBag.jmbg = "JMBG mora biti jedinstven!";
+                    return View("Registration");
+                }
+            }
             Pacijent novi = new Pacijent
             {
                 KorisnickoIme = kime,
@@ -69,9 +99,9 @@ namespace DomZdravlja.Controllers
                 Tip = Type.Pacijent,
                 Ime = ime,
                 Prezime = prezime,
-                DatumRodjenja = DateTime.ParseExact(datum, "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                DatumRodjenja = datum,
                 Email = email,
-                JMBG = jmbg
+                JMBG = jmbg,
             };
             sviPacijenti.Add(novi);
             ViewBag.pacijenti = sviPacijenti;
@@ -97,7 +127,7 @@ namespace DomZdravlja.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(string ime, string prezime, string sifra, string kime, string datum, string email, string jmbg)
+        public ActionResult Edit(string ime, string prezime, string sifra, string kime, DateTime datum, string email, string jmbg)
         {
             List<Pacijent> sviPacijenti = (List<Pacijent>)HttpContext.Application["pacijenti"];
             for (int i = 0; i <= sviPacijenti.Count() - 1; i++)
@@ -116,7 +146,7 @@ namespace DomZdravlja.Controllers
                     k.Ime = kime;
                     k.Prezime = prezime;
                     k.Sifra = sifra;
-                    k.DatumRodjenja = DateTime.ParseExact(datum, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    k.DatumRodjenja = datum;
                     k.Email = email;
                 }
             }

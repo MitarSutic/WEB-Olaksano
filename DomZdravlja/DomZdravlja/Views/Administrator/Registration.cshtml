@@ -1,13 +1,14 @@
 ﻿
-@{
-    ViewBag.Title = "Registration";
-}
-
 <h2>Registration</h2>
 <body>
     <form id="regForm" action="/Administrator/Register" method="post" onsubmit=" return validateForm()">
         <label>Korisnicko ime:</label>
         <input type="text" name="kime">
+        @if (ViewBag.kime != null)
+        {
+            <br />
+            <input type="text" value="@ViewBag.kime" readonly style="width: @(ViewBag.kime.Length + 1)ch;"/>
+        }
         <br />
         <label>Ime</label>
         <input type="text" name="ime" />
@@ -19,13 +20,23 @@
         <input type="password" name="sifra" />
         <br />
         <label>Datum rodjena</label>
-        <input type="text" name="datum" />
+        <input type="date" name="datum" />
         <br />
         <label>Email</label>
         <input type="email" name="email" />
+        @if (ViewBag.email != null)
+        {
+            <br />
+            <input type="text" value="@ViewBag.email" readonly />
+        }
         <br />
         <label>JMBG</label>
         <input type="text" name="jmbg" />
+        @if (ViewBag.jmbg != null)
+        {
+            <br />
+            <input type="text" value="@ViewBag.jmbg" readonly />
+        }
         <br />
         <input type="submit" value="Save" />
     </form>
@@ -47,20 +58,10 @@
             alert("Sva polja su obavezna!");
             return false;
         }
-        var datePattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-        if (!datum.match(datePattern)) {
-            alert("Datum mora biti u formatu dd/MM/yyyy!");
-            return false;
-        }
-        var parts = datum.split('/');
-        var day = parseInt(parts[0], 10);
-        var month = parseInt(parts[1], 10);
-        var year = parseInt(parts[2], 10);
-        var date = new Date(year, month - 1, day);
 
-        // Check if date is valid
-        if (date.getDate() !== day || date.getMonth() + 1 !== month || date.getFullYear() !== year) {
-            alert("Unet datum nije validan!");
+        var dateInput = new Date(datum);
+        if (isNaN(dateInput.getTime())) {
+            alert("Datum nije validan!");
             return false;
         }
 

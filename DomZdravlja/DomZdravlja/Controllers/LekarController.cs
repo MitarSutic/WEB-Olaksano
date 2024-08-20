@@ -12,6 +12,7 @@ namespace DomZdravlja.Controllers
     public class LekarController : Controller
     {
 
+        [HttpGet]
         public ActionResult Index()
         {
             Korisnik korisnik = (Korisnik)Session["user"];
@@ -31,22 +32,41 @@ namespace DomZdravlja.Controllers
             return View();
         }
 
-
+        [HttpGet]
         public ActionResult MakeTermin()
         {
             return View();
         }
 
+        [HttpGet]
+        public ActionResult MakeTerapija()
+        {
+            List<Termin> sviTermini = (List<Termin>)HttpContext.Application["sIztermini"];
+            Korisnik k = (Korisnik)Session["user"];
+            List<Termin> terminiLekara = new List<Termin>();
+            foreach (var t in sviTermini)
+            {
+                if(k.KorisnickoIme == t.kImeLekara && t.Statustermina == StatusTermina.Zakazan && t.OpisTerapije == String.Empty)
+                {
+                    terminiLekara.Add(t);
+                }
+            }
+            ViewBag.terminiLekara = terminiLekara;
+            ViewBag.lekar = k;
+            return View();
+        }
+
         [HttpPost]
-        public ActionResult CreateTermin(DateTime datum)
+        public ActionResult CreateTermin(string datum)
         {
             List<Termin> sviTermini = (List<Termin>)HttpContext.Application["sIztermini"];
             List<Termin> slTermini = (List<Termin>)HttpContext.Application["stermini"];
             Korisnik korisnik = (Korisnik)Session["user"];
+            DateTime parsedDatum = DateTime.ParseExact(datum, "MM/dd/yyyy HH:mm", CultureInfo.CurrentCulture);
             Termin termin = new Termin
             {
                 kImeLekara = korisnik.KorisnickoIme,
-                DatumIVremeZakazanogTermina = datum,
+                DatumIVremeZakazanogTermina = parsedDatum,
                 Statustermina = StatusTermina.Slobodan
             };
             sviTermini.Add(termin);
@@ -55,6 +75,37 @@ namespace DomZdravlja.Controllers
             ViewBag.sIztermini = sviTermini;
             ViewBag.slTermini = slTermini;
             return View("Index");
+        }
+
+        [HttpPost]
+        public ActionResult CreateTerapija(DateTime t, string terapija)
+        {
+            List<Termin> sviTermini = (List<Termin>)HttpContext.Application["sIztermini"];
+            List<Termin> slTermini = (List<Termin>)HttpContext.Application["stermini"];
+            foreach (Termin ter in sviTermini)
+            {
+                if(ter.DatumIVremeZakazanogTermina == t)
+                {
+                    ter.OpisTerapije = terapija;
+                }
+            }
+            foreach (Termin ter in slTermini)
+            {
+                if (ter.DatumIVremeZakazanogTermina == t)
+                {
+                    ter.OpisTerapije = terapija;
+                }
+            }
+            ViewBag.sIztermini = sviTermini;
+            ViewBag.slTermini = slTermini;
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult PregledTerapija(string terapija)
+        {
+            ViewBag.terapija = terapija;
+            return View();
         }
         public ActionResult Logout()
         {

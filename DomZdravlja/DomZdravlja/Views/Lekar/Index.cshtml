@@ -12,6 +12,7 @@
                 <th>Status</th>
                 <th>Datum i Vreme</th>
                 <th>Opis Terapije</th>
+                <th>Pregled terapije</th>
             </tr>
         </thead>
         <tbody>
@@ -22,11 +23,15 @@
                     <td>@termin.Statustermina</td>
                     <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@termin.OpisTerapije</td>
+                    @if(termin.OpisTerapije != String.Empty)
+                {
+                    <td><a href="@Url.Action("PregledTerapija", "Lekar", new { terapija = termin.OpisTerapije })">Pregled terapije</a></td>
+                }
                 </tr>
             }
         </tbody>
     </table>
-    <table border="1">
+    @*<table border="1">
         <thead>
             <tr>
                 <th>Datum i Vreme</th>
@@ -43,10 +48,18 @@
                         <td>@termin.Statustermina</td>
                     </tr>
                 }
-             }
+            }
         </tbody>
-    </table>
-    <form action="/Lekar/MakeTermin">
+    </table>*@
+    <form action="/Lekar/MakeTermin" method="get">
         <input type="submit" value="Kreiraj termin" />
+    </form>
+    <br />
+    <form action="/Lekar/MakeTerapija" method="get">
+        <input type="submit" value="Kreiraj terapiju" />
+    </form>
+    <br />
+    <form action="/Lekar/Logout">
+        <input type="submit" value="Logout" />
     </form>
 </body>

@@ -200,7 +200,11 @@ namespace DomZdravlja.Models
                     string pacijent = parts[1];
                     StatusTermina status = (StatusTermina)Enum.Parse(typeof(StatusTermina), parts[2], true);
                     DateTime datumTermina = DateTime.ParseExact(parts[3], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
-                    string opis = parts[4];                 
+                    string opis = string.Empty;
+                    if (parts.Length > 4)
+                    {
+                         opis = parts[4];
+                    }
                     Termin termin = new Termin
                     {
                         kImeLekara = kImeLekara,

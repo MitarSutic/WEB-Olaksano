@@ -1,0 +1,33 @@
+﻿
+<h2>Kreiranje terapija, lekar @ViewBag.lekar.Ime</h2>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Pacijent:</th>
+                <th>Status</th>
+                <th>Datum i Vreme</th>
+                <th>Dodaj terapiju</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DomZdravlja.Models.Termin termin in ViewBag.terminiLekara)
+             {
+                <tr>
+                    <td>@termin.ImePacijenta</td>
+                    <td>@termin.Statustermina</td>
+                    <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
+                    
+                    <td>
+                        <form action="/Lekar/CreateTerapija" method="post">
+                            <input type="text" name="terapija" />
+                            <input type="hidden" name="t" value="@termin.DatumIVremeZakazanogTermina" />
+                            <input type="submit" value="Izmeni" />
+                        </form>
+                    </td>
+                    
+                </tr>
+             }
+        </tbody>
+    </table>
+</body>

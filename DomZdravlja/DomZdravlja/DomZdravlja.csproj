@@ -130,6 +130,8 @@
     <Content Include="Views\Administrator\ViewPacijent.cshtml" />
     <Content Include="Views\Administrator\EditPacijent.cshtml" />
     <Content Include="Views\Lekar\MakeTermin.cshtml" />
+    <Content Include="Views\Lekar\MakeTerapija.cshtml" />
+    <Content Include="Views\Lekar\PregledTerapija.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

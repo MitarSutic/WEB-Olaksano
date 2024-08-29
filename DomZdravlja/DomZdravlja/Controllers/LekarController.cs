@@ -20,6 +20,8 @@ namespace DomZdravlja.Controllers
             List<Termin> sviTermini = (List<Termin>)HttpContext.Application["sIztermini"];
             List<Termin> slTermini = (List<Termin>)HttpContext.Application["stermini"];
             List<Termin> terminiLekara = new List<Termin>();
+            Session["svitermini"] = sviTermini;
+            Session["sltermini"] = slTermini;
             foreach (Termin t in sviTermini)
             {
                 if (t.kImeLekara == korisnik.KorisnickoIme)
@@ -38,10 +40,35 @@ namespace DomZdravlja.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult CreateTermin(string datum)
+        {
+            List<Termin> sviTermini = (List<Termin>)Session["svitermini"];
+            List<Termin> slTermini = (List<Termin>)Session["sltermini"];
+            Korisnik korisnik = (Korisnik)Session["user"];
+            DateTime parsedDatum = DateTime.ParseExact(datum, "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
+            Termin termin = new Termin
+            {
+                kImeLekara = korisnik.KorisnickoIme,
+                ImePacijenta = String.Empty,
+                DatumIVremeZakazanogTermina = parsedDatum,
+                Statustermina = StatusTermina.Slobodan,
+                OpisTerapije = String.Empty
+            };
+            sviTermini.Add(termin);
+            slTermini.Add(termin);
+            Session["svitermini"] = sviTermini;
+            Session["sltermini"] = slTermini;
+            ViewBag.korisnik = korisnik;
+            ViewBag.sIztermini = sviTermini;
+            ViewBag.slTermini = slTermini;
+            return View("Index");
+        }
+
         [HttpGet]
         public ActionResult MakeTerapija()
         {
-            List<Termin> sviTermini = (List<Termin>)HttpContext.Application["sIztermini"];
+            List<Termin> sviTermini = (List <Termin>)Session["svitermini"];
             Korisnik k = (Korisnik)Session["user"];
             List<Termin> terminiLekara = new List<Termin>();
             foreach (var t in sviTermini)
@@ -56,32 +83,12 @@ namespace DomZdravlja.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult CreateTermin(string datum)
-        {
-            List<Termin> sviTermini = (List<Termin>)HttpContext.Application["sIztermini"];
-            List<Termin> slTermini = (List<Termin>)HttpContext.Application["stermini"];
-            Korisnik korisnik = (Korisnik)Session["user"];
-            DateTime parsedDatum = DateTime.ParseExact(datum, "MM/dd/yyyy HH:mm", CultureInfo.CurrentCulture);
-            Termin termin = new Termin
-            {
-                kImeLekara = korisnik.KorisnickoIme,
-                DatumIVremeZakazanogTermina = parsedDatum,
-                Statustermina = StatusTermina.Slobodan
-            };
-            sviTermini.Add(termin);
-            slTermini.Add(termin);
-            ViewBag.korisnik = korisnik;
-            ViewBag.sIztermini = sviTermini;
-            ViewBag.slTermini = slTermini;
-            return View("Index");
-        }
 
         [HttpPost]
         public ActionResult CreateTerapija(DateTime t, string terapija)
         {
-            List<Termin> sviTermini = (List<Termin>)HttpContext.Application["sIztermini"];
-            List<Termin> slTermini = (List<Termin>)HttpContext.Application["stermini"];
+            List<Termin> sviTermini = (List<Termin>)Session["svitermini"];
+            List<Termin> slTermini = (List<Termin>)Session["sltermini"];
             foreach (Termin ter in sviTermini)
             {
                 if(ter.DatumIVremeZakazanogTermina == t)
@@ -96,6 +103,8 @@ namespace DomZdravlja.Controllers
                     ter.OpisTerapije = terapija;
                 }
             }
+            Session["svitermini"] = sviTermini;
+            Session["sltermini"] = slTermini;
             ViewBag.sIztermini = sviTermini;
             ViewBag.slTermini = slTermini;
             return RedirectToAction("Index");
@@ -110,6 +119,8 @@ namespace DomZdravlja.Controllers
         public ActionResult Logout()
         {
             Session["user"] = null;
+            Session["sltermini"] = null;
+            Session["svitermini"] = null;
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Prijava");
         }

@@ -1,2 +1,0 @@
-﻿pacijent;pacijent;Pacijent;Jelena;Ostojic;21/06/1993;jelena.o@gmail.com;1234567891011
-test;test;Pacijent;Mitar;Sutic;10/02/2002;mitar.agm@gmail.com;0210002800033

@@ -18,7 +18,7 @@
         <input type="password" name="sifra" />
         <br />
         <label>Datum rodjenja</label>
-        <input type="date" name="datum" placeholder="@ViewBag.pacijent.DatumRodjenja" />
+        <input type="text" name="datum" placeholder="dd/MM/yyyy" />
         <br />
         <label>Email</label>
         <input type="email" name="email" placeholder="@ViewBag.pacijent.Email" />
@@ -44,10 +44,25 @@
                 alert("Sva polja su obavezna!");
                 return false;
             }
-            
-            var dateInput = new Date(datum);
-            if (isNaN(dateInput.getTime())) {
-                alert("Datum nije validan!");
+
+            // Regular expression to match dd/MM/yyyy format
+            var datePattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+            var match = datum.match(datePattern);
+
+            if (!match) {
+                alert("Datum mora biti u formatu dd/MM/yyyy!");
+                return false;
+            }
+
+            var day = parseInt(match[1], 10);
+            var month = parseInt(match[2], 10);
+            var year = parseInt(match[3], 10);
+
+            // Creating date object to validate
+            var dateObj = new Date(year, month - 1, day);
+
+            if (dateObj.getDate() !== day || dateObj.getMonth() + 1 !== month || dateObj.getFullYear() !== year) {
+                alert("Uneti datum nije validan!");
                 return false;
             }
 

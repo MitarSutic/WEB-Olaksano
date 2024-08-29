@@ -19,14 +19,28 @@
             @foreach (var termin in ViewBag.sIztermini)
             {
                 <tr>
-                    <td>@termin.ImePacijenta</td>
+                    @if (termin.ImePacijenta == String.Empty)
+                    {
+                        <td align="center">/</td>
+                    }
+                    else
+                    {
+                        <td>@termin.ImePacijenta</td>
+                    }
                     <td>@termin.Statustermina</td>
                     <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td>@termin.OpisTerapije</td>
-                    @if(termin.OpisTerapije != String.Empty)
-                {
-                    <td><a href="@Url.Action("PregledTerapija", "Lekar", new { terapija = termin.OpisTerapije })">Pregled terapije</a></td>
-                }
+                    @if (termin.OpisTerapije == String.Empty)
+                    {
+                        <td align="center">/</td>
+                    }
+                    else
+                    {
+                        <td>@termin.OpisTerapije</td>
+                    }
+                    @if (termin.OpisTerapije != String.Empty)
+                    {
+                        <td><a href="@Url.Action("PregledTerapija", "Lekar", new { terapija = termin.OpisTerapije })">Pregled terapije</a></td>
+                    }
                 </tr>
             }
         </tbody>

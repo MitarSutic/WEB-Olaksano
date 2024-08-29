@@ -7,7 +7,7 @@
         @if (ViewBag.kime != null)
         {
             <br />
-            <input type="text" value="@ViewBag.kime" readonly style="width: @(ViewBag.kime.Length + 1)ch;"/>
+            <input type="text" value="@ViewBag.kime" readonly style="width: @(ViewBag.kime.Length + 1)ch;" />
         }
         <br />
         <label>Ime</label>
@@ -20,7 +20,7 @@
         <input type="password" name="sifra" />
         <br />
         <label>Datum rodjena</label>
-        <input type="date" name="datum" />
+        <input type="text" name="datum" placeholder="dd/MM/yyyy" />
         <br />
         <label>Email</label>
         <input type="email" name="email" />
@@ -59,8 +59,20 @@
             return false;
         }
 
-        var dateInput = new Date(datum);
-        if (isNaN(dateInput.getTime())) {
+        var datePattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+        var match = datum.match(datePattern);
+
+        if (!match) {
+            alert("Datum mora biti u formatu dd/MM/yyyy!");
+            return false;
+        }
+
+        var day = parseInt(match[1], 10);
+        var month = parseInt(match[2], 10);
+        var year = parseInt(match[3], 10);
+        var dateObj = new Date(year, month - 1, day);
+
+        if (dateObj.getDate() !== day || dateObj.getMonth() + 1 !== month || dateObj.getFullYear() !== year) {
             alert("Datum nije validan!");
             return false;
         }
@@ -75,4 +87,3 @@
         return true;
     }
 </script>
-

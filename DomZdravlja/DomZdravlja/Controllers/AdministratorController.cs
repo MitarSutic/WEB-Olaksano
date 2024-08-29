@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI.WebControls;
@@ -21,6 +23,9 @@ namespace DomZdravlja.Controllers
             ViewBag.korisnik = korisnik;
             List<Pacijent> sviPacijenti = (List<Pacijent>)HttpContext.Application["pacijenti"];
             List<Termin> sizTermini = (List<Termin>) HttpContext.Application["sIztermini"];
+            Dictionary<string,Korisnik> sviKorisnici = (Dictionary<string, Korisnik>)HttpContext.Application["korisnici"];
+            Session["korisnici"] = sviKorisnici;
+            Session["pacijenti"] = sviPacijenti;
             ViewBag.pacijenti = sviPacijenti;
             ViewBag.sviTermini = sizTermini;
             return View();
@@ -38,11 +43,14 @@ namespace DomZdravlja.Controllers
             {
                 if (sviPacijenti[i].KorisnickoIme == korisnickoIme)
                 {
+                    Pacijent p = sviPacijenti[i];
                     sviPacijenti.RemoveAt(i);
+                    //DeletePacijent(p);
                     ViewBag.poruka = $"Uspesno obrisan pacijent {korisnickoIme}";
                     break;
                 }
             }
+            Session["pacijenti"] = sviPacijenti;
             return RedirectToAction("Index");
         }
 
@@ -71,7 +79,7 @@ namespace DomZdravlja.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(string ime, string prezime, string sifra, string kime, DateTime datum,string email,string jmbg, string tip)
+        public ActionResult Register(string ime, string prezime, string sifra, string kime, string datum,string email,string jmbg, string tip)
         {
             List<Pacijent> sviPacijenti = (List<Pacijent>)HttpContext.Application["pacijenti"];
             foreach(Pacijent p in sviPacijenti)
@@ -99,11 +107,12 @@ namespace DomZdravlja.Controllers
                 Tip = Type.Pacijent,
                 Ime = ime,
                 Prezime = prezime,
-                DatumRodjenja = datum,
+                DatumRodjenja = DateTime.ParseExact(datum,"dd/MM/yyyy",CultureInfo.CurrentCulture).Date,
                 Email = email,
                 JMBG = jmbg,
             };
             sviPacijenti.Add(novi);
+            //WritePacijenta(novi);
             ViewBag.pacijenti = sviPacijenti;
             return RedirectToAction("Index");
         }
@@ -127,7 +136,7 @@ namespace DomZdravlja.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(string ime, string prezime, string sifra, string kime, DateTime datum, string email, string jmbg)
+        public ActionResult Edit(string ime, string prezime, string sifra, string kime, string datum, string email, string jmbg)
         {
             List<Pacijent> sviPacijenti = (List<Pacijent>)HttpContext.Application["pacijenti"];
             for (int i = 0; i <= sviPacijenti.Count() - 1; i++)
@@ -146,22 +155,71 @@ namespace DomZdravlja.Controllers
                     k.Ime = kime;
                     k.Prezime = prezime;
                     k.Sifra = sifra;
-                    k.DatumRodjenja = datum;
+                    k.DatumRodjenja = DateTime.ParseExact(datum, "dd/MM/yyyy", CultureInfo.CurrentCulture).Date;
                     k.Email = email;
                 }
             }
             ViewBag.pacijenti = sviPacijenti;
             ViewBag.poruka = $"Uspesno promenjen korisnik {kime}";
+            Session["pacijenti"] = sviPacijenti;
             Session["pacijent"] = null;
             Session["greska"] = null;
             return RedirectToAction("Index");
+        }
+
+        public void WritePacijenta(Pacijent p)
+        {
+            string fileKorisnici = HostingEnvironment.MapPath("~/App_Data/korisnici.txt");
+            string filePacijenti = HostingEnvironment.MapPath("~/App_Data/pacijenti.txt");
+            string date = p.DatumRodjenja.ToString();
+            DateTime parsed = DateTime.Parse(date);
+            string formattedDate = parsed.ToString("dd/MM/yyyy");
+            using (StreamWriter sw = new StreamWriter(fileKorisnici, true))
+            {
+                sw.WriteLine($"{p.KorisnickoIme};{p.Sifra};{p.Tip};{p.Ime};{p.Prezime};{formattedDate};{p.Email}");
+            }
+            using (StreamWriter sw = new StreamWriter(filePacijenti, true))
+            {
+                sw.WriteLine($"{p.KorisnickoIme};{p.Sifra};{p.Tip};{p.Ime};{p.Prezime};{formattedDate};{p.Email};{p.JMBG}");
+            }
+        }
+
+        public void UpdatePacijent(Pacijent p)
+        {
+            string fileKorisnici = HostingEnvironment.MapPath("~/App_Data/korisnici.txt");
+            string filePacijenti = HostingEnvironment.MapPath("~/App_Data/pacijenti.txt");
+            
+        }
+
+        public void DeletePacijent(Pacijent p )
+        {
+            string fileKorisnici = HostingEnvironment.MapPath("~/App_Data/korisnici.txt");
+            string filePacijenti = HostingEnvironment.MapPath("~/App_Data/pacijenti.txt");
+            string tempK = Path.GetTempPath();
+            string tempP = Path.GetTempPath();
+            string line;
+            using (var sr = new StreamReader(fileKorisnici))
+            using (var sw = new StreamWriter(tempK))
+            {
+                while ((line = sr.ReadLine()) != null)
+                {
+                    string[] parts = line.Split(';');
+                    if (parts[0] == p.KorisnickoIme) 
+                    {
+                        
+                        continue;
+                    }                    
+                    sw.WriteLine(line);
+                }
+            }
+
         }
 
         public ActionResult Logout()
         {
             Session["user"] = null;
             FormsAuthentication.SignOut();
-            return RedirectToAction("Index","Prijava");
+            return RedirectToAction("Index","Prijava");           
         }
     }
 }

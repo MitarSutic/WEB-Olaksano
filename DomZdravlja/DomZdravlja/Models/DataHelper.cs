@@ -14,7 +14,6 @@ namespace DomZdravlja.Models
            {
             Dictionary<string, Korisnik> _users = new Dictionary<string, Korisnik>();
             string filePath = HostingEnvironment.MapPath(path);
-
             if (System.IO.File.Exists(filePath))
             {
                 string[] lines = System.IO.File.ReadAllLines(filePath);
@@ -29,7 +28,7 @@ namespace DomZdravlja.Models
                         string type = parts[2];
                         string ime = parts[3];
                         string prezime = parts[4];
-                        DateTime datumRodjenja = DateTime.ParseExact(parts[5],"dd/MM/yyyy",CultureInfo.InvariantCulture);
+                        DateTime datumRodjenja = DateTime.ParseExact(parts[5],"dd/MM/yyyy",CultureInfo.CurrentCulture);
                         string email = parts[6];
 
                         Korisnik korisnik = null;
@@ -46,7 +45,7 @@ namespace DomZdravlja.Models
                                     Prezime = prezime,
                                     DatumRodjenja = datumRodjenja,
                                     Email = email,
-                                    JMBG = parts[7],
+                                    //JMBG = parts[7],
                                     ListaZakazanihTermina = new List<Termin>()
                                 };
                                 break;
@@ -103,7 +102,7 @@ namespace DomZdravlja.Models
                     string type = parts[2];
                     string ime = parts[3];
                     string prezime = parts[4];
-                    DateTime datumRodjenja = DateTime.ParseExact(parts[5], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                    DateTime datumRodjenja = DateTime.ParseExact(parts[5], "dd/MM/yyyy", CultureInfo.CurrentCulture);
                     string email = parts[6];
                     string jmbg = parts[7];
 
@@ -141,7 +140,7 @@ namespace DomZdravlja.Models
                         string type = parts[2];
                         string ime = parts[3];
                         string prezime = parts[4];
-                        DateTime datumRodjenja = DateTime.ParseExact(parts[5], "dd/MM/yyyy", CultureInfo.InvariantCulture);
+                        DateTime datumRodjenja = DateTime.ParseExact(parts[5], "dd/MM/yyyy", CultureInfo.CurrentCulture);
                         string email = parts[6];
 
                         Lekar lekar = new Lekar
@@ -173,7 +172,7 @@ namespace DomZdravlja.Models
                 {
                     string[] parts = line.Split(';');
                     string kImeLekara = parts[0];
-                    DateTime datumTermina = DateTime.ParseExact(parts[1], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                    DateTime datumTermina = DateTime.ParseExact(parts[1], "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
                     Termin termin = new Termin
                         {
                             kImeLekara = kImeLekara,
@@ -199,7 +198,7 @@ namespace DomZdravlja.Models
                     string kImeLekara = parts[0];
                     string pacijent = parts[1];
                     StatusTermina status = (StatusTermina)Enum.Parse(typeof(StatusTermina), parts[2], true);
-                    DateTime datumTermina = DateTime.ParseExact(parts[3], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                    DateTime datumTermina = DateTime.ParseExact(parts[3], "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
                     string opis = string.Empty;
                     if (parts.Length > 4)
                     {
@@ -218,6 +217,5 @@ namespace DomZdravlja.Models
             }
             return slobodniIZakazaniTermini;
         }
-
     }
 }

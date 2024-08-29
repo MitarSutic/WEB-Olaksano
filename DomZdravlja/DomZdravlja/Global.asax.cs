@@ -14,11 +14,11 @@ namespace DomZdravlja
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            Dictionary<string, Korisnik> korisnici = DataHelper.UcitajKorisnike("~/App_Data/korisnici.txt");
-            List<Lekar> lekari = DataHelper.UcitajLekare("~/App_Data/lekari.txt");
-            List<Pacijent> pacijenti = DataHelper.UcitajPacijente("~/App_Data/pacijenti.txt");
-            List<Termin> slobodniTermini = DataHelper.UcitajSlobodneTermine("~/App_Data/slobodni termini.txt");
-            List<Termin> slobodniIZakazaniTermini = DataHelper.UcitajSlobodneIZakazaneTermine("~/App_Data/zakazani i slobodni termini.txt");
+            Dictionary<string, Korisnik> korisnici = DataHelper.UcitajKorisnike("~/App_Data/korisnici.csv");
+            List<Lekar> lekari = DataHelper.UcitajLekare("~/App_Data/lekari.csv");
+            List<Pacijent> pacijenti = DataHelper.UcitajPacijente("~/App_Data/pacijenti.csv");
+            List<Termin> slobodniTermini = DataHelper.UcitajSlobodneTermine("~/App_Data/slobodni termini.csv");
+            List<Termin> slobodniIZakazaniTermini = DataHelper.UcitajSlobodneIZakazaneTermine("~/App_Data/zakazani i slobodni termini.csv");
             HttpContext.Current.Application["korisnici"] = korisnici;
             HttpContext.Current.Application["lekari"] = lekari;
             HttpContext.Current.Application["pacijenti"] = pacijenti;

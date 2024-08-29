@@ -3,9 +3,9 @@
 <body>
     <h2>Kreiranje termina</h2>
     <form id="createTerminForm" action="/Lekar/CreateTermin" method="post" onsubmit="return validateForm()">
-        <label>Datum i vreme (MM/dd/yyyy HH:mm):</label>
+        <label>Datum i vreme (dd/MM/yyyy HH:mm):</label>
         <br />
-        <input type="text" name="datum" placeholder="MM/dd/yyyy HH:mm" />
+        <input type="text" name="datum" placeholder="dd/MM/yyyy HH:mm" />
         <br />
         <input type="submit" value="Kreiraj Termin" />
     </form>
@@ -19,17 +19,17 @@
                 return false;
             }
 
-            // Regular expression pattern to match MM/dd/yyyy HH:mm format
+            // Regular expression pattern to match dd/MM/yyyy HH:mm format
             var datePattern = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/;
             var match = datum.match(datePattern);
 
             if (!match) {
-                alert("Datum i vreme moraju biti u formatu MM/dd/yyyy HH:mm!");
+                alert("Datum i vreme moraju biti u formatu dd/MM/yyyy HH:mm!");
                 return false;
             }
 
-            var month = parseInt(match[1], 10);
-            var day = parseInt(match[2], 10);
+            var day = parseInt(match[1], 10);
+            var month = parseInt(match[2], 10);
             var year = parseInt(match[3], 10);
             var hour = parseInt(match[4], 10);
             var minute = parseInt(match[5], 10);

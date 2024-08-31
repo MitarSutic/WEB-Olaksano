@@ -1,3 +1,0 @@
-﻿pacijent;pacijent;Pacijent;Jelena;Ostojic;21/06/1993;jelena.o@gmail.com;123456789011
-lekar;lekar;Lekar;Marko;Pavlovic;11/05/2000;markop@gmail.com
-admin;admin;Administrator;Mitar;Sutic;02/10/2002;email.test@gmail.com

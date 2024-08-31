@@ -1,0 +1,60 @@
+﻿@{ Layout = null;}
+<link rel="stylesheet" type="text/css" href="~/Content/ViewPacijent.css"
+<body>
+    <h2>Prikaz pacijenta</h2>
+    <form action="/Administrator/Index" method="get">
+        <label>Korisnicko ime</label>
+        <label>@ViewBag.pacijent.KorisnickoIme</label>
+        <br />
+        <label>Ime</label>
+        <label>@ViewBag.pacijent.Ime</label>
+        <br />
+        <label>Prezime</label>
+        <label>@ViewBag.pacijent.Prezime</label>
+        <br />
+        <label>Sifra</label>
+        <label>@ViewBag.pacijent.Sifra</label>
+        <br />
+        <label>Datum rodjena</label>
+        <label>@ViewBag.pacijent.DatumRodjenja.ToString("dd/MM/yyyy")</label>
+        <br />
+        <label>Email</label>
+        <label>@ViewBag.pacijent.Email</label>
+        <br />
+        <label>JMBG</label>
+        <label>@ViewBag.pacijent.JMBG</label>
+        <br />
+        <h3>Termini</h3>
+        @if (ViewBag.terminiPacijenta != null && ViewBag.terminiPacijenta.Count > 0)
+        {
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Lekar</th>
+                        <th>Datum termina</th>
+                        <th>Opis</th>
+                        <!-- Add more columns for other Termin fields if needed -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var termin in ViewBag.terminiPacijenta)
+                    {
+                        <tr>
+                            <td>@termin.Lekar.Ime</td>
+                            <td>@termin.DatumIVremeZakazanogTermina.ToString()</td>
+                            <td>@termin.OpisTerapije</td>
+                            <!-- Add more cells for other Termin fields if needed -->
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Pacijent nema zakazanih termina.</p>
+        }
+
+        <br />
+        <input type="submit" value="Nazad" />
+    </form>
+</body>

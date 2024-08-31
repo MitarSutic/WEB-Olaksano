@@ -1,0 +1,92 @@
+﻿@{ Layout = null;}
+<h2>Registracija</h2>
+<link rel="stylesheet" type="text/css" href="~/Content/EditPacijent.css">
+
+<body>
+    <form id="regForm" action="/Administrator/Register" method="post" onsubmit=" return validateForm()">
+        <label>Korisnicko ime:</label>
+        <input type="text" name="kime">
+        @if (ViewBag.kime != null)
+        {
+            <br />
+            <input type="text" value="@ViewBag.kime" readonly style="width: @(ViewBag.kime.Length + 1)ch;" />
+        }
+        <br />
+        <label>Ime</label>
+        <input type="text" name="ime" />
+        <br />
+        <label>Prezime</label>
+        <input type="text" name="prezime" />
+        <br />
+        <label>Sifra</label>
+        <input type="password" name="sifra" />
+        <br />
+        <label>Datum rodjena</label>
+        <input type="text" name="datum" placeholder="dd/MM/yyyy" />
+        <br />
+        <label>Email</label>
+        <input type="email" name="email" />
+        @if (ViewBag.email != null)
+        {
+            <br />
+            <input type="text" value="@ViewBag.email" readonly />
+        }
+        <br />
+        <label>JMBG</label>
+        <input type="text" name="jmbg" />
+        @if (ViewBag.jmbg != null)
+        {
+            <br />
+            <input type="text" value="@ViewBag.jmbg" readonly />
+        }
+        <br />
+        <input type="submit" value="Save" />
+    </form>
+    <br />
+    <form action="/Administrator/Index" method="get">
+        <input type="submit" value="Nazad" />
+    </form>
+</body>
+<script>
+    function validateForm() {
+        var kime = document.forms["regForm"]["kime"].value;
+        var ime = document.forms["regForm"]["ime"].value;
+        var prezime = document.forms["regForm"]["prezime"].value;
+        var sifra = document.forms["regForm"]["sifra"].value;
+        var datum = document.forms["regForm"]["datum"].value;
+        var email = document.forms["regForm"]["email"].value;
+        var jmbg = document.forms["regForm"]["jmbg"].value;
+
+        if (kime === "" || ime === "" || prezime === "" || sifra === "" || datum === "" || email === "" || jmbg === "") {
+            alert("Sva polja su obavezna!");
+            return false;
+        }
+
+        var datePattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+        var match = datum.match(datePattern);
+
+        if (!match) {
+            alert("Datum mora biti u formatu dd/MM/yyyy!");
+            return false;
+        }
+
+        var day = parseInt(match[1], 10);
+        var month = parseInt(match[2], 10);
+        var year = parseInt(match[3], 10);
+        var dateObj = new Date(year, month - 1, day);
+
+        if (dateObj.getDate() !== day || dateObj.getMonth() + 1 !== month || dateObj.getFullYear() !== year) {
+            alert("Datum nije validan!");
+            return false;
+        }
+
+        var jmbgPattern = /^\d{13}$/;
+        if (!jmbg.match(jmbgPattern)) {
+            alert("JMBG mora biti tačno 13 cifara!");
+            return false;
+        }
+
+
+        return true;
+    }
+</script>

@@ -88,11 +88,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\korisnici.txt" />
-    <Content Include="App_Data\lekari.txt" />
-    <Content Include="App_Data\pacijenti.txt" />
-    <Content Include="App_Data\administrator.txt" />
+    <None Include="App_Data\korisnici.csv" />
+    <None Include="App_Data\lekari.csv" />
+    <None Include="App_Data\pacijenti.csv" />
+    <None Include="App_Data\slobodni termini.csv" />
+    <None Include="App_Data\slobodni i zakazani termini.csv" />
+    <None Include="App_Data\administratori.csv" />
+    <Content Include="Content\Administrator.css" />
+    <Content Include="Content\EditPacijent.css" />
+    <Content Include="Content\KreiranjeTerapije.css" />
+    <Content Include="Content\KreiranjeTermina.css" />
+    <Content Include="Content\Lekar.css" />
+    <Content Include="Content\Pacijent.css" />
+    <Content Include="Content\Prijava.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\Terapija.css" />
+    <Content Include="Content\ViewPacijent.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -124,6 +135,14 @@
     <Content Include="Views\Pacijent\Index.cshtml" />
     <Content Include="Views\Lekar\Index.cshtml" />
     <Content Include="Views\Administrator\Index.cshtml" />
+    <Content Include="Views\Administrator\Registration.cshtml" />
+    <Content Include="Views\Administrator\ViewPacijent.cshtml" />
+    <Content Include="Views\Administrator\EditPacijent.cshtml" />
+    <Content Include="Views\Lekar\MakeTermin.cshtml" />
+    <Content Include="Views\Lekar\MakeTerapija.cshtml" />
+    <Content Include="Views\Lekar\PregledTerapija.cshtml" />
+    <Content Include="Views\Pacijent\PregledTerapija.cshtml" />
+    <Content Include="Views\Pacijent\Terapija.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

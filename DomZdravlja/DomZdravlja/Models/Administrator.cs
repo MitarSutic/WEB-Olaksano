@@ -6,6 +6,6 @@ using System.Web;
 namespace DomZdravlja.Models
 {
     public class Administrator : Korisnik
-    {      
+    {
     }
 }

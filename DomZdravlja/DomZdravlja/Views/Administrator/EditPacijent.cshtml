@@ -1,0 +1,74 @@
+﻿@{ Layout = null;}
+@if (ViewBag.greska != null)
+{
+    <h2 style="color: #e74c3c;">@ViewBag.greska</h2>
+}
+<link rel="stylesheet" type="text/css" href="~/Content/EditPacijent.css">
+<h2>Edit Pacijenta</h2>
+<body>
+    <form id="editPacijentForm" action="/Administrator/Edit" method="post" onsubmit="return validateForm()">
+        <label>Korisnicko ime:</label>
+        <input type="text" name="kime" value="@ViewBag.pacijent.KorisnickoIme" readonly>
+        <br />
+        <label>Ime</label>
+        <input type="text" name="ime" placeholder="@ViewBag.pacijent.Ime" />
+        <br />
+        <label>Prezime</label>
+        <input type="text" name="prezime" placeholder="@ViewBag.pacijent.Prezime" />
+        <br />
+        <label>Sifra</label>
+        <input type="password" name="sifra" />
+        <br />
+        <label>Datum rodjenja</label>
+        <input type="text" name="datum" placeholder="dd/MM/yyyy" />
+        <br />
+        <label>Email</label>
+        <input type="email" name="email" placeholder="@ViewBag.pacijent.Email" />
+        <br />
+        <label>JMBG</label>
+        <input type="text" name="jmbg" value="@ViewBag.pacijent.JMBG" readonly />
+        <br />
+        <input type="submit" value="Edit" />
+    </form>
+    <form action="/Administrator/Index" method="get">
+        <input type="submit" value="Nazad" />
+    </form>
+
+    <script>
+        function validateForm() {
+            var ime = document.forms["editPacijentForm"]["ime"].value;
+            var prezime = document.forms["editPacijentForm"]["prezime"].value;
+            var sifra = document.forms["editPacijentForm"]["sifra"].value;
+            var datum = document.forms["editPacijentForm"]["datum"].value;
+            var email = document.forms["editPacijentForm"]["email"].value;
+
+            if (ime === "" || prezime === "" || sifra === "" || datum === "" || email === "") {
+                alert("Sva polja su obavezna!");
+                return false;
+            }
+
+            // Regular expression to match dd/MM/yyyy format
+            var datePattern = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+            var match = datum.match(datePattern);
+
+            if (!match) {
+                alert("Datum mora biti u formatu dd/MM/yyyy!");
+                return false;
+            }
+
+            var day = parseInt(match[1], 10);
+            var month = parseInt(match[2], 10);
+            var year = parseInt(match[3], 10);
+
+            // Creating date object to validate
+            var dateObj = new Date(year, month - 1, day);
+
+            if (dateObj.getDate() !== day || dateObj.getMonth() + 1 !== month || dateObj.getFullYear() !== year) {
+                alert("Uneti datum nije validan!");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>

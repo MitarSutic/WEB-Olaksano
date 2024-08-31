@@ -1,0 +1,20 @@
+﻿@{ Layout = null;}
+<link rel="stylesheet" type="text/css" href="~/Content/Terapija.css">
+<html>
+<body>
+    @if (ViewBag.terapija != null)
+    {
+        <form action="~/Pacijent/PregledTerapija" method="get">
+            <p>@ViewBag.terapija</p>
+            <input type="submit" value="Nazad" />
+        </form>
+    }
+    else
+    {
+        <form action="~/Pacijent/PregledTerapija" method="get">
+            <p>Nemate prepisanu terapiju</p>
+            <input type="submit" value="Nazad" />
+        </form>
+    }
+</body>
+</html>

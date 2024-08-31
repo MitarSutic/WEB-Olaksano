@@ -14,43 +14,55 @@ namespace DomZdravlja.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.korisnici = HttpContext.Application["korisnici"];
             return View();
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult Login(string kIme, string sifra)
         {
-            Dictionary<string, Korisnik> korisnici = (Dictionary<string,Korisnik>)HttpContext.Application["korisnici"];
-            if (korisnici.ContainsKey(kIme))
+            Dictionary<string, Korisnik> sviKorisnici = DataHelper.UcitajKorisnike("~/App_Data/korisnici.csv");
+            Korisnik korisnik = new Korisnik();
+            if (sviKorisnici.ContainsKey(kIme))
             {
-                var korisnik = korisnici[kIme];
-                if (korisnik.Sifra == sifra)
+                if (sviKorisnici[kIme].Sifra == sifra)
                 {
-                    
+                    ViewBag.ErrorMessage = null;
+                    korisnik = sviKorisnici[kIme];
                     if (korisnik.Tip == Type.Pacijent)
                     {
+                        Session["user"] = korisnik;
                         return RedirectToAction("Index", "Pacijent");
                     }
                     else if (korisnik.Tip == Type.Lekar)
-                    { 
+                    {
+                        Session["user"] = korisnik;
                         return RedirectToAction("Index", "Lekar");
                     }
                     else if (korisnik.Tip == Type.Administrator)
                     {
+                        Session["user"] = korisnik;
                         return RedirectToAction("Index", "Administrator");
                     }
                 }
+                else
+                {
+                    ViewBag.ErrorMessage = "Netacno korisnicko ime ili lozinka";
+                    return View("Index");
+                }
+                
             }
-
-            ViewBag.ErrorMessage = "Neispravno korisničko ime ili šifra.";
+            else
+            {
+                ViewBag.ErrorMessage = "Korisnicko ime nije prijavljeno";
+            }
             return View("Index");
         }
 
         public ActionResult Logout()
         {
+            Session["user"] = null;
             FormsAuthentication.SignOut();
-            return RedirectToAction("Login");
+            return View("Index");
         }
     }
 }

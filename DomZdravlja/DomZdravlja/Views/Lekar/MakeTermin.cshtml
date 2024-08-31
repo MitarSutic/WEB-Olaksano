@@ -1,0 +1,63 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/KreiranjeTermina.css">
+    <title>Kreiranje termina</title>
+</head>
+<body>
+    <h2>Kreiranje termina</h2>
+    <form id="createTerminForm" action="/Lekar/CreateTermin" method="post" onsubmit="return validateForm()">
+        <label>Datum i vreme (dd/MM/yyyy HH:mm):</label>
+        <input type="text" name="datum" placeholder="dd/MM/yyyy HH:mm" />
+        <input type="submit" value="Kreiraj Termin" />
+    </form>
+    <form action="~/Lekar/Index">
+        <input type="submit" value="Nazad" />
+    </form>
+
+    <script>
+        function validateForm() {
+            var datum = document.forms["createTerminForm"]["datum"].value;
+
+            if (datum === "") {
+                alert("Datum i vreme su obavezna!");
+                return false;
+            }
+
+            // Regular expression pattern to match dd/MM/yyyy HH:mm format
+            var datePattern = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/;
+            var match = datum.match(datePattern);
+
+            if (!match) {
+                alert("Datum i vreme moraju biti u formatu dd/MM/yyyy HH:mm!");
+                return false;
+            }
+
+            var day = parseInt(match[1], 10);
+            var month = parseInt(match[2], 10);
+            var year = parseInt(match[3], 10);
+            var hour = parseInt(match[4], 10);
+            var minute = parseInt(match[5], 10);
+
+            // Check if date is valid
+            var date = new Date(year, month - 1, day, hour, minute);
+
+            if (date.getDate() !== day || date.getMonth() + 1 !== month || date.getFullYear() !== year ||
+                date.getHours() !== hour || date.getMinutes() !== minute) {
+                alert("Unet datum i vreme nisu validni!");
+                return false;
+            }
+
+            // Check if the date is in the future
+            var currentDateTime = new Date();
+            if (date <= currentDateTime) {
+                alert("Nije moguće zakazati termin u prošlosti!");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>

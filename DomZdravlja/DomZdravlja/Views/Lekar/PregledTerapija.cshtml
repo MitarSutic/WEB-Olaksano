@@ -1,0 +1,16 @@
+﻿@{ Layout = null;}
+<link rel="stylesheet" type="text/css" href="~/Content/Terapija.css" />
+@if (ViewBag.terapija != null)
+{
+    <form action="~/Lekar/Index" method="get">
+        <p>@ViewBag.terapija</p>
+        <input type="submit" value="Nazad" />
+    </form>
+}
+else
+{
+    <form action="~/Lekar/Index" method="get">
+        <p>Ne postoji terapija</p>
+        <input type="submit" value="Nazad" />
+    </form>
+}

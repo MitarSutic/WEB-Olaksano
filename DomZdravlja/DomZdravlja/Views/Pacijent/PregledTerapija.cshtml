@@ -1,0 +1,36 @@
+﻿@{ Layout = null;}
+<link rel="stylesheet" type="text/css" href="~/Content/pacijent.css">
+<h2>Pregled Terapija</h2>
+<body>
+    @if (ViewBag.termini != null)
+    {
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Lekar:</th>
+                    <th>Datum i Vreme termina</th>
+                    <th>Pregled terapije</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var termin in ViewBag.termini)
+                {
+                    <tr>
+                        <td>@termin.Lekar.Ime</td>
+                        <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>
+                            <a href="@Url.Action("Terapija", "Pacijent", new { terapija = termin.OpisTerapije })">Pregled terapije</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Nema dostupnih terapija</p>
+    }
+    <form action="~/Pacijent/Index" method="get">
+        <input type="submit" value="Nazad" />
+    </form>
+</body>

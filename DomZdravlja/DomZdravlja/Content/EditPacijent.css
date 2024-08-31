@@ -1,0 +1,76 @@
+﻿/* Administrator.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h2 {
+    color: #2c3e50;
+    text-align: center;
+    font-size: 24px; /* Increased font size */
+}
+
+form {
+    background-color: #ffffff;
+    border: 1px solid #ddd; /* Added border for form */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+    form label {
+        display: block;
+        margin-bottom: 10px; /* Increased margin for spacing */
+        font-weight: bold;
+        font-size: 16px; /* Increased font size */
+    }
+
+    form input[type="text"],
+    form input[type="password"],
+    form input[type="email"] {
+        width: calc(100% - 22px);
+        padding: 12px; /* Increased padding for better spacing */
+        margin-bottom: 14px; /* Increased margin for spacing */
+        border: 1px solid #ccc; /* Added border for input fields */
+        border-radius: 4px;
+        font-size: 16px; /* Increased font size for inputs */
+    }
+
+    form input[type="submit"] {
+        background-color: #3498db;
+        color: #ffffff;
+        border: none;
+        padding: 12px 24px; /* Increased padding for button */
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 18px; /* Increased font size for button */
+    }
+
+        form input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+    form input[readonly] {
+        background-color: #f9f9f9;
+        cursor: not-allowed;
+        border: 1px solid #ddd; /* Added border for read-only fields */
+    }
+
+    form .back-button {
+        background-color: #e74c3c;
+    }
+
+        form .back-button:hover {
+            background-color: #c0392b;
+        }
+
+p {
+    text-align: center;
+    color: #e74c3c;
+    font-size: 20px; /* Increased font size */
+}

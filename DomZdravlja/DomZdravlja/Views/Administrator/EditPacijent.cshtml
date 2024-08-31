@@ -1,7 +1,9 @@
-﻿@if (ViewBag.greska != null)
-            {
-                <h2>@ViewBag.greska</h2>
-            }
+﻿@{ Layout = null;}
+@if (ViewBag.greska != null)
+{
+    <h2 style="color: #e74c3c;">@ViewBag.greska</h2>
+}
+<link rel="stylesheet" type="text/css" href="~/Content/EditPacijent.css">
 <h2>Edit Pacijenta</h2>
 <body>
     <form id="editPacijentForm" action="/Administrator/Edit" method="post" onsubmit="return validateForm()">

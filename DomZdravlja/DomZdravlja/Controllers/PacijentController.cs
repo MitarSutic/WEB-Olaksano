@@ -9,7 +9,6 @@ using System.Web.Security;
 
 namespace DomZdravlja.Controllers
 {
-    // za termine napravi sesiju lekara pa onda dodavaj jednog po jednog u termine
     public class PacijentController : Controller
     {
         [HttpGet]
@@ -17,9 +16,21 @@ namespace DomZdravlja.Controllers
         {
             Korisnik pacijent = (Korisnik)Session["user"];
             ViewBag.korisnik = pacijent;
-            List<Termin> slobodniTermini = (List<Termin>)HttpContext.Application["stermini"];
-            Session["sltermini"] = slobodniTermini;
-            Session["svitermini"] = (List<Termin>)HttpContext.Application["sIztermini"];
+            List<Termin> svitermini = DataHelper.UcitajSlobodneIZakazaneTermine("~/App_Data/slobodni i zakazani termini.csv", "~/App_Data/lekari.csv");
+            Session["svitermini"] = svitermini;
+            List<Termin> slobodniTermini = new List<Termin>();
+            for(int i = 0; i < svitermini.Count; i++)
+            {
+                if (svitermini[i].Statustermina == StatusTermina.Slobodan)
+                {
+                    slobodniTermini.Add(svitermini[i]);
+                }
+            }
+            if(slobodniTermini.Count() == 0)
+            {
+                ViewBag.stermini = null;
+            }
+            else
             ViewBag.stermini = slobodniTermini;
             return View();
         }
@@ -27,19 +38,41 @@ namespace DomZdravlja.Controllers
         [HttpPost]
         public ActionResult ZakaziTermin(DateTime datum)
         {
-            List<Termin> slobodniTermini = (List<Termin>)HttpContext.Application["stermini"];
-            List<Termin> slobodniIZakazaniTermini = (List<Termin>)HttpContext.Application["sIztermini"];
-            Korisnik pacijent = (Korisnik)Session["user"];
 
-            for (int t = 0; t < slobodniTermini.Count;)
+            List<Termin> slobodniIZakazaniTermini = DataHelper.UcitajSlobodneIZakazaneTermine("~/App_Data/slobodni i zakazani termini.csv", "~/App_Data/lekari.csv");
+            Korisnik pacijent = (Korisnik)Session["user"];
+            string fileSiZTermini = Server.MapPath("~/App_Data/slobodni i zakazani termini.csv");
+
+            for (int t = 0; t < slobodniIZakazaniTermini.Count;)
             {
-                if (slobodniTermini[t].DatumIVremeZakazanogTermina == datum)
+                if (slobodniIZakazaniTermini[t].DatumIVremeZakazanogTermina == datum)
                 {
-                    slobodniTermini[t].Statustermina = StatusTermina.Zakazan;
-                    slobodniTermini[t].ImePacijenta = pacijent.Ime;
                     ViewBag.poruka = $"Uspesno zakazan termin {datum.ToString("dd/MM/yyyy HH:mm")}";
-                    slobodniIZakazaniTermini.Add(slobodniTermini[t]); 
-                    slobodniTermini.RemoveAt(t); 
+                    slobodniIZakazaniTermini[t].Statustermina = StatusTermina.Zakazan;
+                    slobodniIZakazaniTermini[t].ImePacijenta = pacijent.Ime;
+                    if (System.IO.File.Exists(fileSiZTermini))
+                    {
+                        string[] lines = System.IO.File.ReadAllLines(fileSiZTermini);
+                        for (int i = 0; i < lines.Length; i++)
+                        {
+                            string[] parts = lines[i].Split(';');
+                            if(parts.Count() > 3)
+                            {
+                                continue;
+                            }
+                            DateTime datumTermina = DateTime.ParseExact(parts[1], "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
+
+                            // Find the line in the CSV file and update it
+                            if (datumTermina == datum)
+                            {
+                                // Update the CSV line with the new status and patient name
+                                lines[i] = $"{parts[0]};{pacijent.Ime};{slobodniIZakazaniTermini[t].Statustermina};{datumTermina.ToString("dd/MM/yyyy HH:mm")}";
+                                break;
+                            }
+                        }
+                        // Write the updated lines back to the CSV file
+                        System.IO.File.WriteAllLines(fileSiZTermini, lines);
+                    }
                     break;
                 }
                 else
@@ -47,11 +80,23 @@ namespace DomZdravlja.Controllers
                     t++; 
                 }
             }
-
-            
-            Session["sltermini"] = slobodniTermini;
             Session["svitermini"] = slobodniIZakazaniTermini;
-            ViewBag.stermini = slobodniTermini;
+            List<Termin> terminiPacijenta = new List<Termin>();
+            for (int i = 0; i < slobodniIZakazaniTermini.Count; i++)
+            {
+                if (slobodniIZakazaniTermini[i].Statustermina == StatusTermina.Slobodan)
+                {
+                    terminiPacijenta.Add(slobodniIZakazaniTermini[i]);
+                }
+            }
+            if(terminiPacijenta.Count == 0)
+            {
+                ViewBag.stermini = null;
+            }
+            else
+            ViewBag.stermini = terminiPacijenta;
+
+            ViewBag.korisnik = pacijent;
             return View("Index");
         }
 
@@ -68,7 +113,13 @@ namespace DomZdravlja.Controllers
                     terminipacijenta.Add(ter);
                 }
             }
+            if (terminipacijenta.Count() == 0)
+            {
+                ViewBag.termini = null;
+            }
+            else
             ViewBag.termini = terminipacijenta;
+
             return View();
         }
 

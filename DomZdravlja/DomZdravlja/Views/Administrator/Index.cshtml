@@ -1,8 +1,8 @@
-﻿
+﻿@{ Layout = null;}
 @{
     ViewBag.Title = "Početna stranica administratora";
 }
-
+<link rel="stylesheet" type="text/css" href="~/Content/Administrator.css">
 <h2>Dobrodošli, administratoru!</h2>
 @if (ViewBag.poruka != null)
 {
@@ -10,42 +10,44 @@
 }
 else
 {
-<body>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Korisnicko ime</th>
-                <th>Prikazi</th>
-                <th>Izmeni</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var k in ViewBag.pacijenti)
-            {
+    <body>
+        <table border="1">
+            <thead>
                 <tr>
-                    <td>@k.KorisnickoIme</td>
-                    <td>
-                        <a href="@Url.Action("ViewPacijent", "Administrator", new { korisnickoIme = k.KorisnickoIme })">Prikazi</a>
-                    </td>
-                    <td>
-                        <a href="@Url.Action("EditPacijent", "Administrator", new { korisnickoIme = k.KorisnickoIme })">Izmeni</a>
-                    </td>
-                    <td>
-                        <a href="@Url.Action("ObrisiPacijent", "Administrator", new { korisnickoIme = k.KorisnickoIme })"
-                           onclick="return confirm('Da li ste sigurni da želite da obrišete pacijenta?');">Obrisi</a>
-                    </td>
+                    <th>Korisnicko ime</th>
+                    <th>Prikazi</th>
+                    <th>Izmeni</th>
+                    <th>Brisanje</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    <h2>Dodaj novog pacijenta</h2>
-    <form action="/Administrator/Registration">
-        <input type="submit" value="Dodaj novog" />
-    </form>
-    <form action="/Administrator/Logout">
-        <input type="submit" value="Logout" />
-    </form>
-    
-</body>
+            </thead>
+            <tbody>
+                @foreach (var k in ViewBag.pacijenti)
+                {
+                    <tr>
+                        <td>@k.KorisnickoIme</td>
+                        <td>
+                            <a href="@Url.Action("ViewPacijent", "Administrator", new { korisnickoIme = k.KorisnickoIme })">Prikazi</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("EditPacijent", "Administrator", new { korisnickoIme = k.KorisnickoIme })">Izmeni</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("ObrisiPacijent", "Administrator", new { korisnickoIme = k.KorisnickoIme })"
+                               onclick="return confirm('Da li ste sigurni da želite da obrišete pacijenta?');">Obrisi</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <h2>Dodaj novog pacijenta</h2>
+        <form action="/Administrator/Registration">
+            <input type="submit" value="Dodaj novog" />
+        </form>
+        <br />
+        <form action="/Administrator/Logout">
+            <input type="submit" value="Logout" />
+        </form>
+
+    </body>
 
 }

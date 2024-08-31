@@ -92,8 +92,18 @@
     <None Include="App_Data\lekari.csv" />
     <None Include="App_Data\pacijenti.csv" />
     <None Include="App_Data\slobodni termini.csv" />
-    <None Include="App_Data\zakazani i slobodni termini.csv" />
+    <None Include="App_Data\slobodni i zakazani termini.csv" />
+    <None Include="App_Data\administratori.csv" />
+    <Content Include="Content\Administrator.css" />
+    <Content Include="Content\EditPacijent.css" />
+    <Content Include="Content\KreiranjeTerapije.css" />
+    <Content Include="Content\KreiranjeTermina.css" />
+    <Content Include="Content\Lekar.css" />
+    <Content Include="Content\Pacijent.css" />
+    <Content Include="Content\Prijava.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\Terapija.css" />
+    <Content Include="Content\ViewPacijent.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>

@@ -1,79 +1,70 @@
-﻿@{
-    ViewBag.Title = "Početna stranica lekara";
-}
-
-<h2>Dobrodošli, lekare!</h2>
-<h2>Prikaz Termina</h2>
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pregled Termina</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/Lekar.css">
+</head>
 <body>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Pacijent:</th>
-                <th>Status</th>
-                <th>Datum i Vreme</th>
-                <th>Opis Terapije</th>
-                <th>Pregled terapije</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var termin in ViewBag.sIztermini)
-            {
-                <tr>
-                    @if (termin.ImePacijenta == String.Empty)
-                    {
-                        <td align="center">/</td>
-                    }
-                    else
-                    {
-                        <td>@termin.ImePacijenta</td>
-                    }
-                    <td>@termin.Statustermina</td>
-                    <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
-                    @if (termin.OpisTerapije == String.Empty)
-                    {
-                        <td align="center">/</td>
-                    }
-                    else
-                    {
-                        <td>@termin.OpisTerapije</td>
-                    }
-                    @if (termin.OpisTerapije != String.Empty)
-                    {
-                        <td><a href="@Url.Action("PregledTerapija", "Lekar", new { terapija = termin.OpisTerapije })">Pregled terapije</a></td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
-    @*<table border="1">
-        <thead>
-            <tr>
-                <th>Datum i Vreme</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var termin in ViewBag.sltermini)
-            {
-                if (ViewBag.korisnik.KorisnickoIme == termin.kImeLekara)
-                {
+    <div class="container">
+        @if (ViewBag.sIztermini != null)
+        {
+            <table border="1">
+                <thead>
                     <tr>
-                        <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>@termin.Statustermina</td>
+                        <th>Pacijent:</th>
+                        <th>Status</th>
+                        <th>Datum i Vreme</th>
+                        <th>Opis Terapije</th>
+                        <th>Pregled terapije</th>
                     </tr>
-                }
-            }
-        </tbody>
-    </table>*@
-    <form action="/Lekar/MakeTermin" method="get">
-        <input type="submit" value="Kreiraj termin" />
-    </form>
-    <br />
-    <form action="/Lekar/MakeTerapija" method="get">
-        <input type="submit" value="Kreiraj terapiju" />
-    </form>
-    <br />
-    <form action="/Lekar/Logout">
-        <input type="submit" value="Logout" />
-    </form>
+                </thead>
+                <tbody>
+                    @foreach (var termin in ViewBag.sIztermini)
+                    {
+                        <tr>
+                            @if (termin.ImePacijenta == String.Empty)
+                            {
+                                <td align="center">/</td>
+                            }
+                            else
+                            {
+                                <td>@termin.ImePacijenta</td>
+                            }
+                            <td>@termin.Statustermina</td>
+                            <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
+                            @if (termin.OpisTerapije == String.Empty)
+                            {
+                                <td align="center">/</td>
+                            }
+                            else
+                            {
+                                <td>@termin.OpisTerapije</td>
+                            }
+                            @if (termin.OpisTerapije != String.Empty)
+                            {
+                                <td><a href="@Url.Action("PregledTerapija", "Lekar", new { terapija = termin.OpisTerapije })">Pregled terapije</a></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="button-container">
+                <form action="/Lekar/MakeTermin" method="get">
+                    <input type="submit" value="Kreiraj termin" />
+                </form>
+                <form action="/Lekar/MakeTerapija" method="get">
+                    <input type="submit" value="Kreiraj terapiju" />
+                </form>
+                <form action="/Lekar/Logout">
+                    <input type="submit" value="Logout" />
+                </form>
+            </div>
+        }
+        else
+        {
+            <h2>Nemate nikakav termin</h2>
+        }
+    </div>
 </body>
+</html>

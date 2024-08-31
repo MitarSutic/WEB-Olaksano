@@ -1,51 +1,56 @@
-﻿@{
-    ViewBag.Title = "Početna stranica pacijenta";
-}
-
-<h2>Dobrodošli, pacijentu!</h2>
+﻿<!DOCTYPE html>
+@{ Layout = null; }
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/pacijent.css">
+</head>
 <body>
-    <h2>Prikaz Termina</h2>
-    @if (ViewBag.poruka != null)
-    {
-        <p>@ViewBag.poruka</p>
-    }
+    <div class="container">
+        <h2>Dobrodošli, @ViewBag.korisnik.KorisnickoIme!</h2>
+        <h2>Prikaz Termina</h2>
+        @if (ViewBag.poruka != null)
+        {
+            <p>@ViewBag.poruka</p>
+        }
 
-    @if (ViewBag.stermini == null)
-    {
-        <p>Pacijent nema termina</p>
-    }
-    else
-    {
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Lekar:</th>
-                    <th>Datum i Vreme</th>
-                    <th>Zakazivanje</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var termin in ViewBag.stermini)
-                {
+        @if (ViewBag.stermini == null)
+        {
+            <p>Ne postoji slobodan termin</p>
+        }
+        else
+        {
+            <table>
+                <thead>
                     <tr>
-                        <td>@termin.kImeLekara</td>
-                        <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
-                        <td>
-                            @using (Html.BeginForm("ZakaziTermin", "Pacijent", FormMethod.Post, new { datum = termin.DatumIVremeZakazanogTermina }))
-                            {
-                                <input type="hidden" name="datum" value="@termin.DatumIVremeZakazanogTermina" />
-                                <input type="submit" value="Zakazi Termin" />
-                            }
-                        </td>
+                        <th>Lekar:</th>
+                        <th>Datum i Vreme</th>
+                        <th>Zakazivanje</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var termin in ViewBag.stermini)
+                    {
+                        <tr>
+                            <td>@termin.kImeLekara</td>
+                            <td>@termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                @using (Html.BeginForm("ZakaziTermin", "Pacijent", FormMethod.Post, new { datum = termin.DatumIVremeZakazanogTermina }))
+                                {
+                                    <input type="hidden" name="datum" value="@termin.DatumIVremeZakazanogTermina" />
+                                    <input type="submit" value="Zakazi Termin" />
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
         <form action="~/Pacijent/PregledTerapija" method="get">
             <input type="submit" value="Pregled terapija" />
         </form>
         <form action="~/Pacijent/Logout">
             <input type="submit" value="Logout" />
         </form>
-    }
+    </div>
 </body>
+</html>

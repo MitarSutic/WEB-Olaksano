@@ -14,22 +14,20 @@ namespace DomZdravlja.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.korisnici = HttpContext.Application["korisnici"];
-            ViewBag.pacijenti = HttpContext.Application["pacijenti"];
             return View();
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult Login(string kIme, string sifra)
         {
-            Dictionary<string, Korisnik> korisnici = (Dictionary<string,Korisnik>)HttpContext.Application["korisnici"];
-            ViewBag.pacijenti = (List<Pacijent>)HttpContext.Application["pacijenti"];
-            if (korisnici.ContainsKey(kIme))
+            Dictionary<string, Korisnik> sviKorisnici = DataHelper.UcitajKorisnike("~/App_Data/korisnici.csv");
+            Korisnik korisnik = new Korisnik();
+            if (sviKorisnici.ContainsKey(kIme))
             {
-                var korisnik = korisnici[kIme];
-                if (korisnik.Sifra == sifra)
+                if (sviKorisnici[kIme].Sifra == sifra)
                 {
-                    
+                    ViewBag.ErrorMessage = null;
+                    korisnik = sviKorisnici[kIme];
                     if (korisnik.Tip == Type.Pacijent)
                     {
                         Session["user"] = korisnik;
@@ -46,9 +44,17 @@ namespace DomZdravlja.Controllers
                         return RedirectToAction("Index", "Administrator");
                     }
                 }
+                else
+                {
+                    ViewBag.ErrorMessage = "Netacno korisnicko ime ili lozinka";
+                    return View("Index");
+                }
+                
             }
-
-            ViewBag.ErrorMessage = "Neispravno korisničko ime ili šifra.";
+            else
+            {
+                ViewBag.ErrorMessage = "Korisnicko ime nije prijavljeno";
+            }
             return View("Index");
         }
 

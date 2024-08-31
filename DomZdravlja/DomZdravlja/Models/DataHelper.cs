@@ -120,8 +120,43 @@ namespace DomZdravlja.Models
                     pacijenti.Add(pacijent);
                 }
             }
-
             return pacijenti;
+        }
+
+        public static List<Administrator> UcitajAdmine(string path)
+        {
+            List<Administrator> admini = new List<Administrator>();
+            string filePath = HostingEnvironment.MapPath(path);
+            if (System.IO.File.Exists(filePath))
+            {
+                string[] lines = File.ReadAllLines(filePath);
+                foreach (string line in lines)
+                {
+                    string[] parts = line.Split(';');
+
+                    string kIme = parts[0];
+                    string sifra = parts[1];
+                    string type = parts[2];
+                    string ime = parts[3];
+                    string prezime = parts[4];
+                    DateTime datumRodjenja = DateTime.ParseExact(parts[5], "dd/MM/yyyy", CultureInfo.CurrentCulture);
+                    string email = parts[6];
+
+                    Administrator admin = new Administrator
+                    {
+                        KorisnickoIme = kIme,
+                        Sifra = sifra,
+                        Ime = ime,
+                        Prezime = prezime,
+                        DatumRodjenja = datumRodjenja,
+                        Email = email,
+                        Tip = Type.Administrator
+                    };
+                    admini.Add(admin);
+                }
+            }
+
+            return admini;
         }
 
         public static List<Lekar> UcitajLekare(string path)
@@ -161,60 +196,158 @@ namespace DomZdravlja.Models
             return lekari;
         }
 
-        public static List<Termin>UcitajSlobodneTermine(string path)
+        public static List<Termin>UcitajSlobodneTermine(string pathTermini,string pathLekari)
         {
             List<Termin> slobodniTermini = new List<Termin>();
-            string filePath = HostingEnvironment.MapPath(path);
-            if (System.IO.File.Exists(filePath))
+            string filePathTermini = HostingEnvironment.MapPath(pathTermini);
+            string filePathLekari = HostingEnvironment.MapPath(pathLekari);
+
+            Dictionary<string, Lekar> lekari = new Dictionary<string, Lekar>();
+            if (System.IO.File.Exists(filePathLekari))
             {
-                string[] lines = File.ReadAllLines(filePath);
+                string[] lekarLines = File.ReadAllLines(filePathLekari);
+                foreach (string lekarLine in lekarLines)
+                {
+                    string[] parts = lekarLine.Split(';');
+
+                    string kIme = parts[0];
+                    string sifra = parts[1];
+                    string type = parts[2];
+                    string ime = parts[3];
+                    string prezime = parts[4];
+                    DateTime datumRodjenja = DateTime.ParseExact(parts[5], "dd/MM/yyyy", CultureInfo.CurrentCulture);
+                    string email = parts[6];
+
+                    Lekar lekar = new Lekar
+                    {
+                        KorisnickoIme = kIme,
+                        Sifra = sifra,
+                        Ime = ime,
+                        Prezime = prezime,
+                        DatumRodjenja = datumRodjenja,
+                        Email = email,
+                        Tip = Type.Pacijent
+                    };
+                    lekari[kIme] = lekar;
+                }
+            }
+
+            if (System.IO.File.Exists(filePathTermini))
+            {
+                string[] lines = File.ReadAllLines(filePathTermini);
                 foreach (string line in lines)
                 {
                     string[] parts = line.Split(';');
                     string kImeLekara = parts[0];
                     DateTime datumTermina = DateTime.ParseExact(parts[1], "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
-                    Termin termin = new Termin
-                        {
-                            kImeLekara = kImeLekara,
-                            DatumIVremeZakazanogTermina = datumTermina,
-                            Statustermina = StatusTermina.Slobodan
-                        };
-                        slobodniTermini.Add(termin);
-                }
-            }
-            return slobodniTermini;
-        }
 
-        public static List<Termin> UcitajSlobodneIZakazaneTermine(string path)
-        {
-            List<Termin> slobodniIZakazaniTermini = new List<Termin>();
-            string filePath = HostingEnvironment.MapPath(path);
-            if (System.IO.File.Exists(filePath))
-            {
-                string[] lines = File.ReadAllLines(filePath);
-                foreach (string line in lines)
-                {
-                    string[] parts = line.Split(';');
-                    string kImeLekara = parts[0];
-                    string pacijent = parts[1];
-                    StatusTermina status = (StatusTermina)Enum.Parse(typeof(StatusTermina), parts[2], true);
-                    DateTime datumTermina = DateTime.ParseExact(parts[3], "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
-                    string opis = string.Empty;
-                    if (parts.Length > 4)
-                    {
-                         opis = parts[4];
-                    }
                     Termin termin = new Termin
                     {
                         kImeLekara = kImeLekara,
-                        Statustermina = status,
-                        ImePacijenta = pacijent,
                         DatumIVremeZakazanogTermina = datumTermina,
-                        OpisTerapije = opis
+                        Statustermina = StatusTermina.Slobodan
                     };
-                    slobodniIZakazaniTermini.Add(termin);
+
+                    if (lekari.ContainsKey(kImeLekara))
+                    {
+                        termin.Lekar = lekari[kImeLekara];
+                    }
+
+                    slobodniTermini.Add(termin);
                 }
             }
+
+            return slobodniTermini;
+        }
+
+        public static List<Termin> UcitajSlobodneIZakazaneTermine(string pathTermini, string pathLekari)
+        {
+            List<Termin> slobodniIZakazaniTermini = new List<Termin>();
+            string filePathTermini = HostingEnvironment.MapPath(pathTermini);
+            string filePathLekari = HostingEnvironment.MapPath(pathLekari);
+
+            // Load doctors from lekari.csv
+            Dictionary<string, Lekar> lekari = new Dictionary<string, Lekar>();
+            if (System.IO.File.Exists(filePathLekari))
+            {
+                string[] lekarLines = File.ReadAllLines(filePathLekari);
+                foreach (string lekarLine in lekarLines)
+                {
+                    string[] parts = lekarLine.Split(';');
+                    string kIme = parts[0];
+                    string sifra = parts[1];
+                    string type = parts[2];
+                    string ime = parts[3];
+                    string prezime = parts[4];
+                    DateTime datumRodjenja = DateTime.ParseExact(parts[5], "dd/MM/yyyy", CultureInfo.CurrentCulture);
+                    string email = parts[6];
+
+                    Lekar lekar = new Lekar
+                    {
+                        KorisnickoIme = kIme,
+                        Sifra = sifra,
+                        Ime = ime,
+                        Prezime = prezime,
+                        DatumRodjenja = datumRodjenja,
+                        Email = email,
+                        Tip = Type.Pacijent
+                    };
+                    lekari[kIme] = lekar;
+                }
+            }
+            if (System.IO.File.Exists(filePathTermini))
+            {
+                string[] lines = File.ReadAllLines(filePathTermini);
+                foreach (string line in lines)
+                {
+                    string[] parts = line.Split(';');
+                    if (parts.Length == 3)
+                    {
+                        string kImeLekara = parts[0];
+                        DateTime datumTermina = DateTime.ParseExact(parts[1], "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
+                        StatusTermina status = (StatusTermina)Enum.Parse(typeof(StatusTermina), parts[2], true);
+                        Termin termin = new Termin
+                        {
+                            kImeLekara = kImeLekara,
+                            Statustermina = status,
+                            ImePacijenta = String.Empty,
+                            DatumIVremeZakazanogTermina = datumTermina,
+                            OpisTerapije = String.Empty
+                        };
+                        if (lekari.ContainsKey(kImeLekara))
+                        {
+                            termin.Lekar = lekari[kImeLekara];
+                        }
+
+                        slobodniIZakazaniTermini.Add(termin);
+                    }
+                    else
+                    {
+                        string kImeLekara = parts[0];
+                        string pacijent = parts[1];
+                        StatusTermina status = (StatusTermina)Enum.Parse(typeof(StatusTermina), parts[2], true);
+                        DateTime datumTermina = DateTime.ParseExact(parts[3], "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
+                        string opis = parts.Length > 4 ? parts[4] : string.Empty;
+                        Termin termin = new Termin
+                        {
+                            kImeLekara = kImeLekara,
+                            Statustermina = status,
+                            ImePacijenta = pacijent,
+                            DatumIVremeZakazanogTermina = datumTermina,
+                            OpisTerapije = opis
+                        };
+                        if (lekari.ContainsKey(kImeLekara))
+                        {
+                            termin.Lekar = lekari[kImeLekara]; // Assign the corresponding Lekar object
+                        }
+
+                        slobodniIZakazaniTermini.Add(termin);
+                    }
+                    // Match the doctor from lekari.csv using kImeLekara
+                    
+                }
+            }
+
             return slobodniIZakazaniTermini;
         }
     }

@@ -1,9 +1,10 @@
-﻿@if (ViewBag.ErrorMessage != null)
+﻿@{ Layout = null;}
+@if (ViewBag.ErrorMessage != null)
 {
     <div style="color:red;">@ViewBag.ErrorMessage</div>
 }
-<h2>Prijava</h2>
-<form action="~/Prijava/Login" method="post">
+<link rel="stylesheet" type="text/css" href="~/Content/prijava.css">
+<form action="~/Prijava/Login" method="get">
     <table>
         <tr>
             <td>Username:</td>
@@ -20,6 +21,3 @@
         </tr>
     </table>
 </form>
-
-
-

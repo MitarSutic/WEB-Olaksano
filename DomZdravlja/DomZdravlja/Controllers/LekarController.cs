@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,20 +18,17 @@ namespace DomZdravlja.Controllers
         {
             Korisnik korisnik = (Korisnik)Session["user"];
             ViewBag.korisnik = korisnik;
-            List<Termin> sviTermini = (List<Termin>)HttpContext.Application["sIztermini"];
-            List<Termin> slTermini = (List<Termin>)HttpContext.Application["stermini"];
+            List<Termin> sviTermini = DataHelper.UcitajSlobodneIZakazaneTermine("~/App_Data/slobodni i zakazani termini.csv", "~/App_Data/lekari.csv");
             List<Termin> terminiLekara = new List<Termin>();
             Session["svitermini"] = sviTermini;
-            Session["sltermini"] = slTermini;
             foreach (Termin t in sviTermini)
             {
-                if (t.kImeLekara == korisnik.KorisnickoIme)
+                if (t.Lekar.KorisnickoIme == korisnik.KorisnickoIme)
                 {
                     terminiLekara.Add(t);
                 }
             }
             ViewBag.sIztermini = terminiLekara;
-            ViewBag.slTermini = slTermini;
             return View();
         }
 
@@ -43,12 +41,13 @@ namespace DomZdravlja.Controllers
         [HttpPost]
         public ActionResult CreateTermin(string datum)
         {
+            Lekar l = (Lekar)Session["user"];
             List<Termin> sviTermini = (List<Termin>)Session["svitermini"];
-            List<Termin> slTermini = (List<Termin>)Session["sltermini"];
             Korisnik korisnik = (Korisnik)Session["user"];
             DateTime parsedDatum = DateTime.ParseExact(datum, "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
             Termin termin = new Termin
             {
+                Lekar = l,
                 kImeLekara = korisnik.KorisnickoIme,
                 ImePacijenta = String.Empty,
                 DatumIVremeZakazanogTermina = parsedDatum,
@@ -56,12 +55,16 @@ namespace DomZdravlja.Controllers
                 OpisTerapije = String.Empty
             };
             sviTermini.Add(termin);
-            slTermini.Add(termin);
             Session["svitermini"] = sviTermini;
-            Session["sltermini"] = slTermini;
+
+            string t = $"{termin.Lekar.KorisnickoIme};{termin.DatumIVremeZakazanogTermina.ToString("dd/MM/yyyy HH:mm")};{termin.Statustermina}";
+            string fileSiZTermini = Server.MapPath("~/App_Data/slobodni i zakazani termini.csv");
+            using (StreamWriter sw = new StreamWriter(fileSiZTermini, true))
+            {
+                sw.WriteLine(t);
+            }
             ViewBag.korisnik = korisnik;
             ViewBag.sIztermini = sviTermini;
-            ViewBag.slTermini = slTermini;
             return View("Index");
         }
 
@@ -78,7 +81,10 @@ namespace DomZdravlja.Controllers
                     terminiLekara.Add(t);
                 }
             }
-            ViewBag.terminiLekara = terminiLekara;
+            if(terminiLekara.Count == 0)
+                ViewBag.terminiLekara = null;
+            else
+                ViewBag.terminiLekara = terminiLekara;
             ViewBag.lekar = k;
             return View();
         }
@@ -88,25 +94,47 @@ namespace DomZdravlja.Controllers
         public ActionResult CreateTerapija(DateTime t, string terapija)
         {
             List<Termin> sviTermini = (List<Termin>)Session["svitermini"];
-            List<Termin> slTermini = (List<Termin>)Session["sltermini"];
+            string fileSiZTermini = Server.MapPath("~/App_Data/slobodni i zakazani termini.csv");
+            DateTime datumTermina;
+
+            // Update the Termin in the session
             foreach (Termin ter in sviTermini)
-            {
-                if(ter.DatumIVremeZakazanogTermina == t)
-                {
-                    ter.OpisTerapije = terapija;
-                }
-            }
-            foreach (Termin ter in slTermini)
             {
                 if (ter.DatumIVremeZakazanogTermina == t)
                 {
                     ter.OpisTerapije = terapija;
                 }
             }
+
+            if (System.IO.File.Exists(fileSiZTermini))
+            {
+                string[] lines = System.IO.File.ReadAllLines(fileSiZTermini);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    string[] parts = lines[i].Split(';');
+                    if(parts.Length == 3)
+                    {
+                         datumTermina = DateTime.ParseExact(parts[1], "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
+                    }
+                    else
+                    {
+                         datumTermina = DateTime.ParseExact(parts[3], "dd/MM/yyyy HH:mm", CultureInfo.CurrentCulture);
+                    }
+                    
+
+                    if (datumTermina == t)
+                    {
+                        lines[i] = $"{parts[0]};{parts[1]};{parts[2]};{datumTermina.ToString("dd/MM/yyyy HH:mm")};{terapija}";
+                        break;
+                    }
+                }
+
+                System.IO.File.WriteAllLines(fileSiZTermini, lines);
+            }
+
             Session["svitermini"] = sviTermini;
-            Session["sltermini"] = slTermini;
             ViewBag.sIztermini = sviTermini;
-            ViewBag.slTermini = slTermini;
+
             return RedirectToAction("Index");
         }
 
@@ -119,8 +147,6 @@ namespace DomZdravlja.Controllers
         public ActionResult Logout()
         {
             Session["user"] = null;
-            Session["sltermini"] = null;
-            Session["svitermini"] = null;
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Prijava");
         }

@@ -1,0 +1,85 @@
+﻿/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container for main content */
+.container {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading styles */
+h2 {
+    color: #00796b;
+    margin-bottom: 20px;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #00796b;
+        color: white;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+/* Form styling */
+form {
+    margin-top: 20px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+    /* Submit button styling */
+    form input[type="submit"] {
+        background-color: #00796b;
+        align-self:center;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 10px;
+        text-align: center;
+    }
+
+        form input[type="submit"]:hover {
+            background-color: #004d40;
+        }
+
+/* Centering content in body */
+body > h2, body > form {
+    text-align: center;
+}
+p {
+    color: #00796b;
+    font-weight:bold;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: left; /* Center-aligns the text inside <p> elements */
+    margin: 20px 0; /* Adds vertical spacing around paragraphs */
+}

@@ -1,5 +1,7 @@
-﻿
-<h2>Registration</h2>
+﻿@{ Layout = null;}
+<h2>Registracija</h2>
+<link rel="stylesheet" type="text/css" href="~/Content/EditPacijent.css">
+
 <body>
     <form id="regForm" action="/Administrator/Register" method="post" onsubmit=" return validateForm()">
         <label>Korisnicko ime:</label>
@@ -40,6 +42,7 @@
         <br />
         <input type="submit" value="Save" />
     </form>
+    <br />
     <form action="/Administrator/Index" method="get">
         <input type="submit" value="Nazad" />
     </form>

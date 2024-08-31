@@ -1,0 +1,46 @@
+﻿/* General styling for the body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7fa;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Form container styling */
+form {
+    background-color: #ffffff;
+    border: 1px solid #b2dfdb; /* Light border color */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+    /* Paragraph styling */
+    form p {
+        font-size: 18px;
+        color: #00796b;
+        margin-bottom: 20px;
+    }
+
+    /* Button styling */
+    form input[type="submit"] {
+        background-color: #00796b;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        form input[type="submit"]:hover {
+            background-color: #004d40;
+        }

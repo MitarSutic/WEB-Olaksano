@@ -15,14 +15,14 @@ namespace DomZdravlja
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             Dictionary<string, Korisnik> korisnici = DataHelper.UcitajKorisnike("~/App_Data/korisnici.csv");
+            List<Administrator> admini = DataHelper.UcitajAdmine("~/App_Data/administratori.csv");
             List<Lekar> lekari = DataHelper.UcitajLekare("~/App_Data/lekari.csv");
-            List<Pacijent> pacijenti = DataHelper.UcitajPacijente("~/App_Data/pacijenti.csv");
-            List<Termin> slobodniTermini = DataHelper.UcitajSlobodneTermine("~/App_Data/slobodni termini.csv");
-            List<Termin> slobodniIZakazaniTermini = DataHelper.UcitajSlobodneIZakazaneTermine("~/App_Data/zakazani i slobodni termini.csv");
+            List<Pacijent> pacijenti = DataHelper.UcitajPacijente("~/App_Data/pacijenti.csv");           
+            List<Termin> slobodniIZakazaniTermini = DataHelper.UcitajSlobodneIZakazaneTermine("~/App_Data/slobodni i zakazani termini.csv", "~/App_Data/lekari.csv");
+            HttpContext.Current.Application["admini"] = admini;
             HttpContext.Current.Application["korisnici"] = korisnici;
             HttpContext.Current.Application["lekari"] = lekari;
             HttpContext.Current.Application["pacijenti"] = pacijenti;
-            HttpContext.Current.Application["stermini"] = slobodniTermini;
             HttpContext.Current.Application["sIztermini"] = slobodniIZakazaniTermini;
         }
     }

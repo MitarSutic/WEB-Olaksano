@@ -1,13 +1,19 @@
-﻿<!DOCTYPE html>
+﻿@{ Layout = null; }
+<!DOCTYPE html>
 <html>
+<head>
+    <link rel="stylesheet" type="text/css" href="~/Content/KreiranjeTermina.css">
+    <title>Kreiranje termina</title>
+</head>
 <body>
     <h2>Kreiranje termina</h2>
     <form id="createTerminForm" action="/Lekar/CreateTermin" method="post" onsubmit="return validateForm()">
         <label>Datum i vreme (dd/MM/yyyy HH:mm):</label>
-        <br />
         <input type="text" name="datum" placeholder="dd/MM/yyyy HH:mm" />
-        <br />
         <input type="submit" value="Kreiraj Termin" />
+    </form>
+    <form action="~/Lekar/Index">
+        <input type="submit" value="Nazad" />
     </form>
 
     <script>
